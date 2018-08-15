@@ -19,13 +19,12 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.0.2512"
+    version = "1.12.2-14.23.4.2739"
     runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings = "stable_32"
 }
 
 dependencies {
-//    compile files('libs/Waila-1.7.1_1.11.2-dev.jar')
 }
 
 processResources
