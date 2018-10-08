@@ -15,7 +15,7 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class ForgeEventHandler
+public class SitHandler
 {
 	@SubscribeEvent
 	public void onRightClickBlock(RightClickBlock event)
@@ -30,9 +30,9 @@ public class ForgeEventHandler
 
 			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand() == ItemStack.EMPTY)
 			{
-				if(b instanceof BlockSlab && s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM)
+				if(!s.getProperties().containsKey(BlockSlab.HALF) ||(b instanceof BlockSlab && s.getProperties().containsKey(BlockSlab.HALF) && s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
-				else if(b instanceof BlockStairs && s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM)
+				else if(!s.getProperties().containsKey(BlockStairs.HALF) || (b instanceof BlockStairs && s.getProperties().containsKey(BlockStairs.HALF) && s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM))
 					return;
 
 				EntitySit sit = new EntitySit(w, p);
@@ -78,6 +78,6 @@ public class ForgeEventHandler
 	{
 		if(Loader.isModLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 			return true;
-		return false;
+		else return false;
 	}
 }

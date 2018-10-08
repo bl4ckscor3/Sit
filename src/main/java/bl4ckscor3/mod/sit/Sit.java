@@ -33,7 +33,7 @@ public class Sit
 		meta.modId = MODID;
 		meta.name = NAME;
 		meta.version = VERSION;
-		MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+		MinecraftForge.EVENT_BUS.register(new SitHandler());
 	}
 
 	@EventHandler
