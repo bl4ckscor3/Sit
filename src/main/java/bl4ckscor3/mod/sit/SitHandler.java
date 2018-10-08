@@ -30,9 +30,9 @@ public class SitHandler
 
 			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand() == ItemStack.EMPTY)
 			{
-				if(!s.getProperties().containsKey(BlockSlab.HALF) ||(b instanceof BlockSlab && s.getProperties().containsKey(BlockSlab.HALF) && s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
+				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
-				else if(!s.getProperties().containsKey(BlockStairs.HALF) || (b instanceof BlockStairs && s.getProperties().containsKey(BlockStairs.HALF) && s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM))
+				else if(b instanceof BlockStairs && (!s.getProperties().containsKey(BlockStairs.HALF) || s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM))
 					return;
 
 				EntitySit sit = new EntitySit(w, p);
