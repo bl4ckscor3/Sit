@@ -1,0 +1,15 @@
+{
+  "id": "sit",
+  "name": "Sit",
+  "description": "Adds the ability to sit on slabs and stairs.",
+  "version": "v1.1.2",
+  "side": "universal",
+  "initializer": "bl4ckscor3.mod.sit.Sit",
+  "requires": {
+    "fabric": "*"
+  },
+  "mixins": {
+    "client": "sit.client.json",
+    "common": "sit.common.json"
+  }
+}

@@ -4,3 +4,11 @@
 /.project
 /.classpath
 /.gradle
+/.mixin.out
+/.settings
+/logs
+/saves
+*crash*
+*.launch
+options.txt
+usercache.json
