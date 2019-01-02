@@ -3,11 +3,11 @@ package bl4ckscor3.mod.sit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.events.PlayerInteractionEvent;
-import net.minecraft.class_2760;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ActionResult;
@@ -28,7 +28,7 @@ public class Sit implements ModInitializer
 			{
 				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.field_11502) || s.get(SlabBlock.field_11501) != SlabType.BOTTOM))
 					return ActionResult.PASS;
-				else if(b instanceof StairsBlock && (!s.getProperties().contains(StairsBlock.field_11573) || s.get(StairsBlock.field_11572) != class_2760.BOTTOM))
+				else if(b instanceof StairsBlock && (!s.getProperties().contains(StairsBlock.field_11573) || s.get(StairsBlock.field_11572) != BlockHalf.BOTTOM))
 					return ActionResult.PASS;
 
 				EntitySit sit = new EntitySit(world, pos);
