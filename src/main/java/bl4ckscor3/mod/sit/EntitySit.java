@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Packet;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -51,4 +52,10 @@ public class EntitySit extends Entity
 
 	@Override
 	public void writeCustomDataToTag(CompoundTag tag) {}
+
+	@Override
+	public Packet<?> createSpawnPacket()
+	{
+		return null;
+	}
 }

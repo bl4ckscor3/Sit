@@ -26,9 +26,9 @@ public class Sit implements ModInitializer
 
 			if((b instanceof SlabBlock || b instanceof StairsBlock) && !EntitySit.OCCUPIED.containsKey(pos) && player.getStackInHand(hand).isEmpty())
 			{
-				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.field_11502) || s.get(SlabBlock.field_11501) != SlabType.BOTTOM))
+				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return ActionResult.PASS;
-				else if(b instanceof StairsBlock && (!s.getProperties().contains(StairsBlock.field_11573) || s.get(StairsBlock.field_11572) != BlockHalf.BOTTOM))
+				else if(b instanceof StairsBlock && (!s.getProperties().contains(StairsBlock.HALF) || s.get(StairsBlock.HALF) != BlockHalf.BOTTOM))
 					return ActionResult.PASS;
 
 				EntitySit sit = new EntitySit(world, pos);
