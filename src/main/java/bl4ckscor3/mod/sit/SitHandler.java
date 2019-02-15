@@ -6,18 +6,21 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.state.properties.Half;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
+@EventBusSubscriber
 public class SitHandler
 {
 	@SubscribeEvent
-	public void onRightClickBlock(RightClickBlock event)
+	public static void onRightClickBlock(RightClickBlock event)
 	{
 		if(!event.getWorld().isRemote)
 		{
@@ -29,9 +32,9 @@ public class SitHandler
 
 			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
 			{
-				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
+				if(b instanceof BlockSlab && (!s.has(BlockSlab.TYPE) || s.get(BlockSlab.TYPE) != SlabType.BOTTOM))
 					return;
-				else if(b instanceof BlockStairs && (!s.getProperties().containsKey(BlockStairs.HALF) || s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM))
+				else if(b instanceof BlockStairs && (!s.has(BlockStairs.HALF) || s.get(BlockStairs.HALF) != Half.BOTTOM))
 					return;
 
 				EntitySit sit = new EntitySit(w, p);
@@ -43,17 +46,17 @@ public class SitHandler
 	}
 
 	@SubscribeEvent
-	public void onBreak(BreakEvent event)
+	public static void onBreak(BreakEvent event)
 	{
 		if(EntitySit.OCCUPIED.containsKey(event.getPos()))
 		{
-			EntitySit.OCCUPIED.get(event.getPos()).setDead();
+			EntitySit.OCCUPIED.get(event.getPos()).remove();
 			EntitySit.OCCUPIED.remove(event.getPos());
 		}
 	}
 
 	@SubscribeEvent
-	public void onEntityMount(EntityMountEvent event)
+	public static void onEntityMount(EntityMountEvent event)
 	{
 		if(event.isDismounting())
 		{
@@ -61,7 +64,7 @@ public class SitHandler
 
 			if(e instanceof EntitySit)
 			{
-				e.setDead();
+				e.remove();
 				EntitySit.OCCUPIED.remove(e.getPosition());
 			}
 		}
@@ -73,10 +76,10 @@ public class SitHandler
 	 * @param b The block to check
 	 * @return true if the block is a block to additionally support, false otherwise
 	 */
-	private boolean isModBlock(Block b)
+	private static boolean isModBlock(Block b)
 	{
-		if(Loader.isModLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
-			return true;
-		else return false;
+		/*		if(ModList.get().isLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
+					return true;
+		else*/ return false;
 	}
 }

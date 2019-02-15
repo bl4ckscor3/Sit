@@ -13,15 +13,15 @@ public class EntitySit extends Entity
 
 	public EntitySit(World world)
 	{
-		super(world);
+		super(Sit.SIT_ENTITY_TYPE, world);
 		noClip = true;
 		height = 0.0001F;
 		width = 0.0001F;
 	}
-	
+
 	public EntitySit(World world, BlockPos pos)
 	{
-		super(world);
+		super(Sit.SIT_ENTITY_TYPE, world);
 		setPosition(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
 		noClip = true;
 		height = 0.0001F;
@@ -30,14 +30,14 @@ public class EntitySit extends Entity
 	}
 
 	@Override
-	protected void entityInit()
+	protected void registerData()
 	{}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound)
+	protected void readAdditional(NBTTagCompound compound)
 	{}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound)
+	protected void writeAdditional(NBTTagCompound compound)
 	{}
 }
