@@ -18,7 +18,7 @@ archivesBaseName = 'sit'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20181007-1.13'
+    mappings channel: 'stable', version: '43-1.13'
 	
     runs {
         client = {
@@ -37,7 +37,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.10'
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.13'
 }
 
 jar {
