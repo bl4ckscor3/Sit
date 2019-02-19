@@ -27,7 +27,7 @@ public class SitHandler
 			Block b = w.getBlockState(p).getBlock();
 			EntityPlayer e = event.getEntityPlayer();
 
-			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
+			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand() == null)
 			{
 				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
@@ -77,6 +77,6 @@ public class SitHandler
 	{
 		if(Loader.isModLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 			return true;
-		else return false;
+		return false;
 	}
 }
