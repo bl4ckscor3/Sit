@@ -1,16 +1,24 @@
 buildscript {
     repositories {
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.x-v1.1.2"
-group= "bl4ckscor3.mod.sit" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+apply plugin: 'forge'
+
+version = "1.7.10-v1.1"
+group = "bl4ckscor3.mod.sit"
 archivesBaseName = "sit"
 
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
@@ -19,13 +27,24 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
-    runDir = "run"
-    mappings = "stable_39"
+    version = "1.7.10-10.13.3.1420-1.7.10"
+    assetDir = "eclipse/assets"
 }
 
 dependencies {
 }
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+tasks.build.dependsOn('sourceJar', 'deobfJar')
 
 processResources
 {
@@ -42,3 +61,10 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+artifacts {
+	archives deobfJar
+	archives sourceJar
+	archives jar
+}
+
