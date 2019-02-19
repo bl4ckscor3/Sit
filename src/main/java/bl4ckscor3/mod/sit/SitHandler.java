@@ -77,6 +77,6 @@ public class SitHandler
 	{
 		if(Loader.isModLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 			return true;
-		else return false;
+		return false;
 	}
 }
