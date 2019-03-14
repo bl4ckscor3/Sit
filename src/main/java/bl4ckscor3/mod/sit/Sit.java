@@ -10,6 +10,7 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.SlabType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ActionResult;
@@ -17,7 +18,7 @@ import net.minecraft.util.registry.Registry;
 
 public class Sit implements ModInitializer
 {
-	public static final EntityType<EntitySit> ENTITY_SIT = Registry.register(Registry.ENTITY_TYPE, "sit:entity_sit", FabricEntityTypeBuilder.create(EntityCategory.MISC, EntitySit::new).build());
+	public static final EntityType<Entity> ENTITY_SIT = Registry.register(Registry.ENTITY_TYPE, "sit:entity_sit", FabricEntityTypeBuilder.create(EntityCategory.MISC, (type, world) -> new EntitySit(world)).build());
 
 	@Override
 	public void onInitialize()

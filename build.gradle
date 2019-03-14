@@ -12,10 +12,10 @@ minecraft {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:19w06a"
-	mappings "net.fabricmc:yarn:19w06a.3"
-	modCompile "net.fabricmc:fabric-loader:0.3.5.106"
-	modCompile "net.fabricmc:fabric:0.2.0.90"
+	minecraft "com.mojang:minecraft:19w07a"
+	mappings "net.fabricmc:yarn:19w07a.7"
+	modCompile "net.fabricmc:fabric-loader:0.3.6.107"
+	modCompile "net.fabricmc:fabric:0.2.1.94"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
