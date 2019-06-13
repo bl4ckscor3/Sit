@@ -1,11 +1,11 @@
 package bl4ckscor3.mod.sit;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.math.BlockPos;
@@ -26,20 +26,20 @@ public class SitHandler
 		{
 			World w = event.getWorld();
 			BlockPos p = event.getPos();
-			IBlockState s = w.getBlockState(p);
+			BlockState s = w.getBlockState(p);
 			Block b = w.getBlockState(p).getBlock();
-			EntityPlayer e = event.getEntityPlayer();
+			PlayerEntity e = event.getEntityPlayer();
 
-			if((isModBlock(b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
+			if((isModBlock(b) || b instanceof SlabBlock || b instanceof StairsBlock) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
 			{
-				if(b instanceof BlockSlab && (!s.has(BlockSlab.TYPE) || s.get(BlockSlab.TYPE) != SlabType.BOTTOM))
+				if(b instanceof SlabBlock && (!s.has(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
-				else if(b instanceof BlockStairs && (!s.has(BlockStairs.HALF) || s.get(BlockStairs.HALF) != Half.BOTTOM))
+				else if(b instanceof StairsBlock && (!s.has(StairsBlock.HALF) || s.get(StairsBlock.HALF) != Half.BOTTOM))
 					return;
 
 				EntitySit sit = new EntitySit(w, p);
 
-				w.spawnEntity(sit);
+				w.addEntity(sit);
 				e.startRiding(sit);
 			}
 		}

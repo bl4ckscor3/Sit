@@ -3,20 +3,20 @@ package bl4ckscor3.mod.sit;
 import java.util.HashMap;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySit extends Entity
 {
 	public static final HashMap<BlockPos,EntitySit> OCCUPIED = new HashMap<BlockPos,EntitySit>();
 
-	public EntitySit(World world)
+	public EntitySit(EntityType<EntitySit> type, World world)
 	{
-		super(Sit.SIT_ENTITY_TYPE, world);
-		noClip = true;
-		height = 0.0001F;
-		width = 0.0001F;
+		super(type, world);
 	}
 
 	public EntitySit(World world, BlockPos pos)
@@ -24,8 +24,6 @@ public class EntitySit extends Entity
 		super(Sit.SIT_ENTITY_TYPE, world);
 		setPosition(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
 		noClip = true;
-		height = 0.0001F;
-		width = 0.0001F;
 		OCCUPIED.put(pos, this);
 	}
 
@@ -34,10 +32,16 @@ public class EntitySit extends Entity
 	{}
 
 	@Override
-	protected void readAdditional(NBTTagCompound compound)
+	protected void readAdditional(CompoundNBT compound)
 	{}
 
 	@Override
-	protected void writeAdditional(NBTTagCompound compound)
+	protected void writeAdditional(CompoundNBT compound)
 	{}
+
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
 }
