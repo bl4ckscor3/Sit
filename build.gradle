@@ -11,14 +11,14 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.14.2-v1.1.2'
+version = '1.14.x-v1.1.2'
 group = 'bl4ckscor3.mod.sit'
 archivesBaseName = 'sit'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190609-1.14.2'
+    mappings channel: 'snapshot', version: '20190625-1.14.3'
 	
     runs {
         client = {
@@ -37,7 +37,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.2-26.0.16'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.3'
 }
 
 jar {

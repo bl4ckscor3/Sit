@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[26,)" #mandatory
+loaderVersion="[27,)" #mandatory
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
@@ -13,13 +13,13 @@ loaderVersion="[26,)" #mandatory
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[26,)"
+    versionRange="[27,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.sit]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.2]"
+    versionRange="[1.14,1.15)"
     ordering="NONE"
     side="BOTH"
