@@ -1,14 +1,24 @@
-/bin
-/build
-/libs
-/.project
-/.classpath
-/.gradle
-/.mixin.out
-/.settings
-/logs
-/saves
-*crash*
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# eclipse
 *.launch
-options.txt
-usercache.json
+
+# vscode
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# fabric
+run/

@@ -2,44 +2,51 @@ package bl4ckscor3.mod.sit;
 
 import java.util.HashMap;
 
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.server.PlayerStream;
+import net.minecraft.client.network.packet.EntityPositionS2CPacket;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntitySit extends Entity
 {
-	public static final HashMap<BlockPos,EntitySit> OCCUPIED = new HashMap<BlockPos,EntitySit>();
+	public static final HashMap<Vec3d,EntitySit> OCCUPIED = new HashMap<Vec3d,EntitySit>();
+	private int ticks = 0;
 
-	public EntitySit(World world)
+	public EntitySit(EntityType<? extends EntitySit> type, World world)
 	{
-		super(Sit.ENTITY_SIT, world);
+		super(type, world);
 		noClip = true;
 	}
 
-	public EntitySit(World world, BlockPos pos)
+	@Override
+	public void tick()
 	{
-		super(Sit.ENTITY_SIT, world);
-		setPosition(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
-		noClip = true;
-		OCCUPIED.put(pos, this);
+		super.tick();
+
+		if(!hasPassengers())
+		{
+			EntitySit.OCCUPIED.remove(getPos());
+			destroy();
+		}
+
+		if(!world.isClient && ticks++ % 60 == 0) //it's shitty handling but idk wtf to do, the position on the client resets after a short amount of time
+		{
+			ticks = 0;
+			PlayerStream.watching(this).forEach(e -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(e, new EntityPositionS2CPacket(this)));
+		}
 	}
 
-	@Override
-	public void stopRiding()
+	public void setPosAndSync(Vec3d pos)
 	{
-		if(getRiddenEntity() != null)
-			kill();
-
-		super.stopRiding();
-	}
-
-	@Override
-	public void kill()
-	{
-		EntitySit.OCCUPIED.remove(getPos());
-		super.kill();
+		x = pos.getX();
+		y = pos.getY();
+		z = pos.getZ();
+		PlayerStream.watching(this).forEach(e -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(e, new EntityPositionS2CPacket(this)));
 	}
 
 	@Override
@@ -54,6 +61,30 @@ public class EntitySit extends Entity
 	@Override
 	public Packet<?> createSpawnPacket()
 	{
-		return null;
+		return SitClient.createSpawnPacket(this, getPos());
+	}
+
+	@Override
+	protected boolean canClimb()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean collides()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean hasNoGravity()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isInvisible()
+	{
+		return true;
 	}
 }
