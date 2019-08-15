@@ -14,6 +14,7 @@ import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -30,7 +31,7 @@ public class SitHandler
 			Block b = w.getBlockState(p).getBlock();
 			PlayerEntity e = event.getEntityPlayer();
 
-			if((isModBlock(b) || b instanceof SlabBlock || b instanceof StairsBlock) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
+			if((b instanceof SlabBlock || b instanceof StairsBlock || isModBlock(b)) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
 			{
 				if(b instanceof SlabBlock && (!s.has(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
@@ -80,6 +81,8 @@ public class SitHandler
 	{
 		/*		if(ModList.get().isLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 					return true;
-		else*/ return false;
+		else*/ if(ModList.get().isLoaded("snowvariants") && b instanceof trikzon.snowvariants.blocks.SnowSlab)
+			return true;
+		else return false;
 	}
 }
