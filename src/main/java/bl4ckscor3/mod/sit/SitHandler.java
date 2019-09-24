@@ -1,7 +1,6 @@
 package bl4ckscor3.mod.sit;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -30,9 +29,8 @@ public class SitHandler
 			IBlockState s = w.getBlockState(p);
 			Block b = w.getBlockState(p).getBlock();
 			EntityPlayer e = event.getEntityPlayer();
-			int id = w.provider.getDimension();
 
-			if((b instanceof BlockSlab || b instanceof BlockStairs || isModBlock(w, p, b)) && !(EntitySit.OCCUPIED.containsKey(id) && EntitySit.OCCUPIED.get(id).containsKey(p)) && e.getHeldItemMainhand().isEmpty())
+			if((b instanceof BlockSlab || b instanceof BlockStairs || isModBlock(w, p, b)) && !SitUtil.isOccupied(w, p) && e.getHeldItemMainhand().isEmpty())
 			{
 				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
@@ -41,8 +39,11 @@ public class SitHandler
 
 				EntitySit sit = new EntitySit(w, p);
 
-				w.spawnEntity(sit);
-				e.startRiding(sit);
+				if(SitUtil.addSitEntity(w, p, sit))
+				{
+					w.spawnEntity(sit);
+					e.startRiding(sit);
+				}
 			}
 		}
 	}
@@ -50,17 +51,12 @@ public class SitHandler
 	@SubscribeEvent
 	public void onBreak(BreakEvent event)
 	{
-		int id = event.getWorld().provider.getDimension();
-
-		if(!event.getWorld().isRemote && EntitySit.OCCUPIED.containsKey(id))
+		if(!event.getWorld().isRemote)
 		{
-			Map<BlockPos,EntitySit> map = EntitySit.OCCUPIED.get(id);
+			EntitySit entity = SitUtil.getSitEntity(event.getWorld(), event.getPos());
 
-			if(map.containsKey(event.getPos()))
-			{
-				map.get(event.getPos()).setDead();
-				map.remove(event.getPos());
-			}
+			if(entity != null && SitUtil.removeSitEntity(event.getWorld(), event.getPos()))
+				entity.setDead();
 		}
 	}
 
@@ -71,15 +67,8 @@ public class SitHandler
 		{
 			Entity e = event.getEntityBeingMounted();
 
-			if(e instanceof EntitySit)
-			{
-				int id = event.getWorldObj().provider.getDimension();
-
+			if(e instanceof EntitySit && SitUtil.removeSitEntity(event.getWorldObj(), e.getPosition()))
 				e.setDead();
-
-				if(EntitySit.OCCUPIED.containsKey(id))
-					EntitySit.OCCUPIED.get(id).remove(e.getPosition());
-			}
 		}
 	}
 
