@@ -1,6 +1,7 @@
 package bl4ckscor3.mod.sit;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -29,8 +30,9 @@ public class SitHandler
 			IBlockState s = w.getBlockState(p);
 			Block b = w.getBlockState(p).getBlock();
 			EntityPlayer e = event.getEntityPlayer();
+			int id = w.provider.getDimension();
 
-			if((isModBlock(w, p, b) || b instanceof BlockSlab || b instanceof BlockStairs) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
+			if((b instanceof BlockSlab || b instanceof BlockStairs || isModBlock(w, p, b)) && !(EntitySit.OCCUPIED.containsKey(id) && EntitySit.OCCUPIED.get(id).containsKey(p)) && e.getHeldItemMainhand().isEmpty())
 			{
 				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
@@ -48,24 +50,35 @@ public class SitHandler
 	@SubscribeEvent
 	public void onBreak(BreakEvent event)
 	{
-		if(EntitySit.OCCUPIED.containsKey(event.getPos()))
+		int id = event.getWorld().provider.getDimension();
+
+		if(!event.getWorld().isRemote && EntitySit.OCCUPIED.containsKey(id))
 		{
-			EntitySit.OCCUPIED.get(event.getPos()).setDead();
-			EntitySit.OCCUPIED.remove(event.getPos());
+			Map<BlockPos,EntitySit> map = EntitySit.OCCUPIED.get(id);
+
+			if(map.containsKey(event.getPos()))
+			{
+				map.get(event.getPos()).setDead();
+				map.remove(event.getPos());
+			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event)
 	{
-		if(event.isDismounting())
+		if(!event.getWorldObj().isRemote && event.isDismounting())
 		{
 			Entity e = event.getEntityBeingMounted();
 
 			if(e instanceof EntitySit)
 			{
+				int id = event.getWorldObj().provider.getDimension();
+
 				e.setDead();
-				EntitySit.OCCUPIED.remove(e.getPosition());
+
+				if(EntitySit.OCCUPIED.containsKey(id))
+					EntitySit.OCCUPIED.get(id).remove(e.getPosition());
 			}
 		}
 	}
