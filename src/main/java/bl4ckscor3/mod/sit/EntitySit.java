@@ -1,6 +1,7 @@
 package bl4ckscor3.mod.sit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -12,7 +13,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySit extends Entity
 {
-	public static final HashMap<BlockPos,EntitySit> OCCUPIED = new HashMap<BlockPos,EntitySit>();
+	//<dimension type id, <position, entity>>
+	public static final Map<Integer,Map<BlockPos,EntitySit>> OCCUPIED = new HashMap<>();
 
 	public EntitySit(EntityType<EntitySit> type, World world)
 	{
@@ -24,7 +26,16 @@ public class EntitySit extends Entity
 		super(Sit.SIT_ENTITY_TYPE, world);
 		setPosition(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
 		noClip = true;
-		OCCUPIED.put(pos, this);
+
+		if(!world.isRemote)
+		{
+			int id = world.getDimension().getType().getId();
+
+			if(!OCCUPIED.containsKey(id))
+				OCCUPIED.put(id, new HashMap<>());
+
+			OCCUPIED.get(id).put(pos, this);
+		}
 	}
 
 	@Override
@@ -32,11 +43,11 @@ public class EntitySit extends Entity
 	{}
 
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditional(CompoundNBT tag)
 	{}
 
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void writeAdditional(CompoundNBT tag)
 	{}
 
 	@Override

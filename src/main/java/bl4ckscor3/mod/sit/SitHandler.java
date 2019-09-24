@@ -1,5 +1,7 @@
 package bl4ckscor3.mod.sit;
 
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
@@ -29,9 +31,10 @@ public class SitHandler
 			BlockPos p = event.getPos();
 			BlockState s = w.getBlockState(p);
 			Block b = w.getBlockState(p).getBlock();
-			PlayerEntity e = event.getEntityPlayer();
+			PlayerEntity e = event.getPlayer();
+			int id = w.getDimension().getType().getId();
 
-			if((b instanceof SlabBlock || b instanceof StairsBlock || isModBlock(b)) && !EntitySit.OCCUPIED.containsKey(p) && e.getHeldItemMainhand().isEmpty())
+			if((b instanceof SlabBlock || b instanceof StairsBlock || isModBlock(b)) && !(EntitySit.OCCUPIED.containsKey(id) && EntitySit.OCCUPIED.get(id).containsKey(p)) && e.getHeldItemMainhand().isEmpty())
 			{
 				if(b instanceof SlabBlock && (!s.has(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
@@ -49,24 +52,35 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onBreak(BreakEvent event)
 	{
-		if(EntitySit.OCCUPIED.containsKey(event.getPos()))
+		int id = event.getWorld().getDimension().getType().getId();
+
+		if(!event.getWorld().isRemote() && EntitySit.OCCUPIED.containsKey(id))
 		{
-			EntitySit.OCCUPIED.get(event.getPos()).remove();
-			EntitySit.OCCUPIED.remove(event.getPos());
+			Map<BlockPos,EntitySit> map = EntitySit.OCCUPIED.get(id);
+
+			if(map.containsKey(event.getPos()))
+			{
+				map.get(event.getPos()).remove();
+				map.remove(event.getPos());
+			}
 		}
 	}
 
 	@SubscribeEvent
 	public static void onEntityMount(EntityMountEvent event)
 	{
-		if(event.isDismounting())
+		if(!event.getWorldObj().isRemote && event.isDismounting())
 		{
 			Entity e = event.getEntityBeingMounted();
 
 			if(e instanceof EntitySit)
 			{
+				int id = event.getWorldObj().getDimension().getType().getId();
+
 				e.remove();
-				EntitySit.OCCUPIED.remove(e.getPosition());
+
+				if(EntitySit.OCCUPIED.containsKey(id))
+					EntitySit.OCCUPIED.get(id).remove(e.getPosition());
 			}
 		}
 	}
