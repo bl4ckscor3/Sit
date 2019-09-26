@@ -22,7 +22,7 @@ public class SitHandler
 	@SubscribeEvent
 	public void onRightClickBlock(RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote)
+		if(!event.getWorld().isRemote && !SitUtil.isPlayerSitting(event.getEntityPlayer()))
 		{
 			World w = event.getWorld();
 			BlockPos p = event.getPos();
