@@ -3,6 +3,7 @@ package bl4ckscor3.mod.sit;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
@@ -92,6 +93,25 @@ public class SitUtil
 		int id = getDimensionTypeId(world);
 
 		return SitUtil.OCCUPIED.containsKey(id) && SitUtil.OCCUPIED.get(id).containsKey(pos);
+	}
+
+	/**
+	 * Checks whether a player is sitting anywhere
+	 * @param player The player to check
+	 * @return true if the given player is sitting anywhere, false otherwhise
+	 */
+	public static boolean isPlayerSitting(PlayerEntity player)
+	{
+		for(int i : OCCUPIED.keySet())
+		{
+			for(EntitySit sit : OCCUPIED.get(i).values())
+			{
+				if(sit.isPassenger(player))
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	private static int getDimensionTypeId(IWorld world)
