@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -22,7 +23,7 @@ public class SitHandler
 	@SubscribeEvent
 	public void onRightClickBlock(RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && !SitUtil.isPlayerSitting(event.getEntityPlayer()))
+		if(!event.getWorld().isRemote && event.getFace() == EnumFacing.UP && !SitUtil.isPlayerSitting(event.getEntityPlayer()))
 		{
 			World w = event.getWorld();
 			BlockPos p = event.getPos();
