@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.SlabType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -23,7 +24,7 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && !SitUtil.isPlayerSitting(event.getPlayer()))
+		if(!event.getWorld().isRemote && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(event.getPlayer()))
 		{
 			World w = event.getWorld();
 			BlockPos p = event.getPos();
