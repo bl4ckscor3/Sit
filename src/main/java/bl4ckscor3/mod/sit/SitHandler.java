@@ -32,7 +32,7 @@ public class SitHandler
 			Block b = w.getBlockState(p).getBlock();
 			PlayerEntity e = event.getPlayer();
 
-			if((b instanceof SlabBlock || b instanceof StairsBlock || isModBlock(b)) && !SitUtil.isOccupied(w, p) && e.getHeldItemMainhand().isEmpty())
+			if((b instanceof SlabBlock || b instanceof StairsBlock || isModBlock(b)) && !SitUtil.isOccupied(w, p) && e.getHeldItemMainhand().isEmpty() && w.getBlockState(p.up()).isAir(w, p.up()))
 			{
 				if(b instanceof SlabBlock && (!s.has(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
