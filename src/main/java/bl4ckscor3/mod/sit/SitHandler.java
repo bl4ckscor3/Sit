@@ -33,7 +33,11 @@ public class SitHandler
 
 			if((b instanceof BlockSlab || b instanceof BlockStairs || isModBlock(w, p, b)) && !SitUtil.isOccupied(w, p) && e.getHeldItemMainhand().isEmpty())
 			{
-				if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
+				IBlockState blockAbove = w.getBlockState(p.up());
+
+				if(!blockAbove.getBlock().isAir(blockAbove, w, p.up()))
+					return;
+				else if(b instanceof BlockSlab && (!s.getProperties().containsKey(BlockSlab.HALF) || s.getValue(BlockSlab.HALF) != BlockSlab.EnumBlockHalf.BOTTOM))
 					return;
 				else if(b instanceof BlockStairs && (!s.getProperties().containsKey(BlockStairs.HALF) || s.getValue(BlockStairs.HALF) != BlockStairs.EnumHalf.BOTTOM))
 					return;
