@@ -99,7 +99,7 @@ public class SitHandler
 						com.elytradev.architecture.common.shape.Shape.STAIRS,
 						com.elytradev.architecture.common.shape.Shape.STAIRS_INNER_CORNER,
 						com.elytradev.architecture.common.shape.Shape.STAIRS_OUTER_CORNER
-						).contains(((com.elytradev.architecture.common.tile.TileShape)te).shape);
+						).contains(((com.elytradev.architecture.common.tile.TileShape)te).getShape());
 			}
 		}
 
