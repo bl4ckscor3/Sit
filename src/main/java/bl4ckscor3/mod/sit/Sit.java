@@ -44,10 +44,6 @@ public class Sit implements ModInitializer
 
 				EntitySit.OCCUPIED.put(pos, sit);
 				sit.setPosition(pos.getX(), pos.getY(), pos.getZ());
-
-				if(!world.isClient)
-					sit.setPosAndSync(pos);
-
 				world.spawnEntity(sit);
 				player.startRiding(sit);
 				return ActionResult.SUCCESS;

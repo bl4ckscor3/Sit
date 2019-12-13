@@ -1,21 +1,23 @@
 package bl4ckscor3.mod.sit;
 
+import java.util.Collections;
 import java.util.HashMap;
 
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.fabricmc.fabric.api.server.PlayerStream;
-import net.minecraft.client.network.packet.EntityPositionS2CPacket;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Packet;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Arm;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntitySit extends Entity
+public class EntitySit extends LivingEntity
 {
 	public static final HashMap<Vec3d,EntitySit> OCCUPIED = new HashMap<Vec3d,EntitySit>();
-	private int ticks = 0;
 
 	public EntitySit(EntityType<? extends EntitySit> type, World world)
 	{
@@ -31,38 +33,21 @@ public class EntitySit extends Entity
 		if(!hasPassengers())
 		{
 			EntitySit.OCCUPIED.remove(getPos());
-			destroy();
+			remove();
 		}
-
-		if(!world.isClient && ticks++ % 60 == 0) //it's shitty handling but idk wtf to do, the position on the client resets after a short amount of time
-		{
-			ticks = 0;
-			PlayerStream.watching(this).forEach(e -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(e, new EntityPositionS2CPacket(this)));
-		}
-	}
-
-	public void setPosAndSync(Vec3d pos)
-	{
-		x = pos.getX();
-		y = pos.getY();
-		z = pos.getZ();
-		PlayerStream.watching(this).forEach(e -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(e, new EntityPositionS2CPacket(this)));
 	}
 
 	@Override
-	public  void initDataTracker() {}
+	public  void initDataTracker()
+	{
+		super.initDataTracker();
+	}
 
 	@Override
 	public void readCustomDataFromTag(CompoundTag tag) {}
 
 	@Override
 	public void writeCustomDataToTag(CompoundTag tag) {}
-
-	@Override
-	public Packet<?> createSpawnPacket()
-	{
-		return SitClient.createSpawnPacket(this, getPos());
-	}
 
 	@Override
 	protected boolean canClimb()
@@ -86,5 +71,56 @@ public class EntitySit extends Entity
 	public boolean isInvisible()
 	{
 		return true;
+	}
+
+	@Override
+	public float getHealth()
+	{
+		return 100000.0F;
+	}
+
+	@Override
+	protected boolean canDropLootAndXp()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean canHaveStatusEffect(StatusEffectInstance statusEffectInstance)
+	{
+		return false;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource)
+	{
+		return null;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound()
+	{
+		return null;
+	}
+
+	@Override
+	public void equipStack(EquipmentSlot equipmentSlot, ItemStack itemStack) {}
+
+	@Override
+	public Iterable<ItemStack> getArmorItems()
+	{
+		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public ItemStack getEquippedStack(EquipmentSlot equipmentSlot)
+	{
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public Arm getMainArm()
+	{
+		return Arm.RIGHT;
 	}
 }
