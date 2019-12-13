@@ -15,11 +15,11 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntitySit extends LivingEntity
+public class SitEntity extends LivingEntity
 {
-	public static final HashMap<Vec3d,EntitySit> OCCUPIED = new HashMap<Vec3d,EntitySit>();
+	public static final HashMap<Vec3d,SitEntity> OCCUPIED = new HashMap<Vec3d,SitEntity>();
 
-	public EntitySit(EntityType<? extends EntitySit> type, World world)
+	public SitEntity(EntityType<? extends SitEntity> type, World world)
 	{
 		super(type, world);
 		noClip = true;
@@ -32,7 +32,7 @@ public class EntitySit extends LivingEntity
 
 		if(!hasPassengers())
 		{
-			EntitySit.OCCUPIED.remove(getPos());
+			SitEntity.OCCUPIED.remove(getPos());
 			remove();
 		}
 	}
