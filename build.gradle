@@ -11,33 +11,42 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.14.4-v1.2.3'
+version = '1.15.1-v1.2.3'
 group = 'bl4ckscor3.mod.sit'
 archivesBaseName = 'sit'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190912-1.14.3'
+    mappings channel: 'snapshot', version: '20191217-1.14.3'
 	
     runs {
-        client = {
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+        client {
+		    workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                sit {
+                    source sourceSets.main
+                }
+            }
         }
-        server = {
-            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+
+        server {
+		    workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                sit {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.11'
     compile files('libs/snowvariants-1.14.3-1.0.0-deobf.jar')
 }
 

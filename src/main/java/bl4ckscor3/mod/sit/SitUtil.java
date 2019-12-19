@@ -16,7 +16,7 @@ public class SitUtil
 	 * <dimension type id, <position, entity>>
 	 * This map only gets populated on server side.
 	 */
-	private static final Map<Integer,Map<BlockPos,EntitySit>> OCCUPIED = new HashMap<>();
+	private static final Map<Integer,Map<BlockPos,SitEntity>> OCCUPIED = new HashMap<>();
 
 	/**
 	 * Adds a sit entity to the map that keeps track of them. This does not spawn the entity itself.
@@ -25,7 +25,7 @@ public class SitUtil
 	 * @param entity The entity to add
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
-	public static boolean addSitEntity(IWorld world, BlockPos pos, EntitySit entity)
+	public static boolean addSitEntity(IWorld world, BlockPos pos, SitEntity entity)
 	{
 		if(!world.isRemote())
 		{
@@ -69,7 +69,7 @@ public class SitUtil
 	 * @param pos The position to get the entity from
 	 * @return The entity at the given position in the given world, null if there is none. This is always null on the client.
 	 */
-	public static EntitySit getSitEntity(IWorld world, BlockPos pos)
+	public static SitEntity getSitEntity(IWorld world, BlockPos pos)
 	{
 		if(!world.isRemote())
 		{
@@ -104,7 +104,7 @@ public class SitUtil
 	{
 		for(int i : OCCUPIED.keySet())
 		{
-			for(EntitySit sit : OCCUPIED.get(i).values())
+			for(SitEntity sit : OCCUPIED.get(i).values())
 			{
 				if(sit.isPassenger(player))
 					return true;

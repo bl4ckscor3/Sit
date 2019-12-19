@@ -39,7 +39,7 @@ public class SitHandler
 				else if(b instanceof StairsBlock && (!s.has(StairsBlock.HALF) || s.get(StairsBlock.HALF) != Half.BOTTOM))
 					return;
 
-				EntitySit sit = new EntitySit(w, p);
+				SitEntity sit = new SitEntity(w, p);
 
 				if(SitUtil.addSitEntity(w, p, sit))
 				{
@@ -55,7 +55,7 @@ public class SitHandler
 	{
 		if(!event.getWorld().isRemote())
 		{
-			EntitySit entity = SitUtil.getSitEntity(event.getWorld(), event.getPos());
+			SitEntity entity = SitUtil.getSitEntity(event.getWorld(), event.getPos());
 
 			if(entity != null && SitUtil.removeSitEntity(event.getWorld(), event.getPos()))
 				entity.remove();
@@ -69,7 +69,7 @@ public class SitHandler
 		{
 			Entity e = event.getEntityBeingMounted();
 
-			if(e instanceof EntitySit && SitUtil.removeSitEntity(event.getWorldObj(), e.getPosition()))
+			if(e instanceof SitEntity && SitUtil.removeSitEntity(event.getWorldObj(), e.getPosition()))
 				e.remove();
 		}
 	}

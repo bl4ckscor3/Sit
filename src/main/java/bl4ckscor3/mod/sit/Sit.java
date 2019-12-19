@@ -16,12 +16,12 @@ public class Sit
 {
 	public static final String MODID = "sit";
 	@ObjectHolder(MODID + ":entity_sit")
-	public static final EntityType<EntitySit> SIT_ENTITY_TYPE = null;
+	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = null;
 
 	@SubscribeEvent
 	public static void registerEntity(RegistryEvent.Register<EntityType<?>> event)
 	{
-		event.getRegistry().register(EntityType.Builder.<EntitySit>create(EntitySit::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> {
+		event.getRegistry().register(EntityType.Builder.<SitEntity>create(SitEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> {
 			return SIT_ENTITY_TYPE.create(world);
 		}).setTrackingRange(256).setUpdateInterval(20).size(0.0001F, 0.0001F).build(MODID + ":entity_sit").setRegistryName(new ResourceLocation(MODID, "entity_sit")));
 	}
