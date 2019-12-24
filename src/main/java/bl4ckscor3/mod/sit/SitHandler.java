@@ -3,6 +3,8 @@ package bl4ckscor3.mod.sit;
 import java.util.Arrays;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockBed.EnumPartType;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +36,7 @@ public class SitHandler
 			Block block = world.getBlockState(pos).getBlock();
 			EntityPlayer player = event.getEntityPlayer();
 
-			if(isValidBlock(world, pos, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty())
+			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty())
 			{
 				IBlockState stateAbove = world.getBlockState(pos.up());
 
@@ -87,9 +89,19 @@ public class SitHandler
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
-	private static boolean isValidBlock(World world, BlockPos pos, Block block)
+	private static boolean isValidBlock(World world, BlockPos pos, IBlockState state, Block block)
 	{
-		return (block instanceof BlockSlab || block instanceof BlockStairs || isModBlock(world, pos, block));
+		boolean isValid = block instanceof BlockSlab || block instanceof BlockStairs || isModBlock(world, pos, block);
+
+		if(!isValid && block instanceof BlockBed)
+		{
+			state = world.getBlockState(pos.offset(state.getValue(BlockBed.PART) == EnumPartType.HEAD ? state.getValue(BlockBed.FACING).getOpposite() : state.getValue(BlockBed.FACING)));
+
+			if(!(state.getBlock() instanceof BlockBed)) //it's half a bed!
+				isValid = true;
+		}
+
+		return isValid;
 	}
 
 	/**
