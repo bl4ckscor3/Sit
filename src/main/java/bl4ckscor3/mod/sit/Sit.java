@@ -5,9 +5,11 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ObjectHolder;
 
 @Mod(Sit.MODID)
@@ -17,6 +19,11 @@ public class Sit
 	public static final String MODID = "sit";
 	@ObjectHolder(MODID + ":entity_sit")
 	public static final EntityType<EntitySit> SIT_ENTITY_TYPE = null;
+
+	public Sit()
+	{
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Configuration.CONFIG_SPEC);
+	}
 
 	@SubscribeEvent
 	public static void registerEntity(RegistryEvent.Register<EntityType<?>> event)
