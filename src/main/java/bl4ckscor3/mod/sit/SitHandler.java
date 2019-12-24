@@ -1,11 +1,13 @@
 package bl4ckscor3.mod.sit;
 
+import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.properties.BedPart;
 import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
@@ -33,7 +35,7 @@ public class SitHandler
 			Block block = world.getBlockState(pos).getBlock();
 			PlayerEntity player = event.getPlayer();
 
-			if(isValidBlock(world, pos, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
+			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
 			{
 				if(block instanceof SlabBlock && (!state.has(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
@@ -79,12 +81,23 @@ public class SitHandler
 	 * Returns whether or not the given block can be sat on
 	 * @param world The world to check in
 	 * @param pos The position to check at
+	 * @param state The block state at the given position in the given world
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
-	private static boolean isValidBlock(World world, BlockPos pos, Block block)
+	private static boolean isValidBlock(World world, BlockPos pos, BlockState state, Block block)
 	{
-		return (block instanceof SlabBlock || block instanceof StairsBlock || isModBlock(block));
+		boolean isValid = block instanceof SlabBlock || block instanceof StairsBlock || isModBlock(block);
+
+		if(!isValid && block instanceof BedBlock)
+		{
+			state = world.getBlockState(pos.offset(state.get(BedBlock.PART) == BedPart.HEAD ? state.get(BedBlock.HORIZONTAL_FACING).getOpposite() : state.get(BedBlock.HORIZONTAL_FACING)));
+
+			if(!(state.getBlock() instanceof BedBlock)) //it's half a bed!
+				isValid = true;
+		}
+
+		return isValid;
 	}
 
 	/**
