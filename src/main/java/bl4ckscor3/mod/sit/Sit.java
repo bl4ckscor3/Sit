@@ -21,8 +21,12 @@ public class Sit
 	@SubscribeEvent
 	public static void registerEntity(RegistryEvent.Register<EntityType<?>> event)
 	{
-		event.getRegistry().register(EntityType.Builder.<SitEntity>create(SitEntity::new, EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> {
-			return SIT_ENTITY_TYPE.create(world);
-		}).setTrackingRange(256).setUpdateInterval(20).size(0.0001F, 0.0001F).build(MODID + ":entity_sit").setRegistryName(new ResourceLocation(MODID, "entity_sit")));
+		event.getRegistry().register(EntityType.Builder.<SitEntity>create(SitEntity::new, EntityClassification.MISC)
+				.setCustomClientFactory((spawnEntity, world) -> SIT_ENTITY_TYPE.create(world))
+				.setTrackingRange(256)
+				.setUpdateInterval(20)
+				.size(0.0001F, 0.0001F)
+				.build(MODID + ":entity_sit")
+				.setRegistryName(new ResourceLocation(MODID, "entity_sit")));
 	}
 }
