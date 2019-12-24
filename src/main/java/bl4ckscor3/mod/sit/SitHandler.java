@@ -86,6 +86,7 @@ public class SitHandler
 	 * Returns whether or not the given block can be sat on
 	 * @param world The world to check in
 	 * @param pos The position to check at
+	 * @param state The block state at the given position in the given world
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
