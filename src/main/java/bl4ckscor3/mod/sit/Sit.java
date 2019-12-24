@@ -3,7 +3,6 @@ package bl4ckscor3.mod.sit;
 import java.util.Arrays;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -33,7 +32,6 @@ public class Sit
 		meta.modId = MODID;
 		meta.name = NAME;
 		meta.version = VERSION;
-		MinecraftForge.EVENT_BUS.register(new SitHandler());
 	}
 
 	@EventHandler

@@ -10,18 +10,21 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@EventBusSubscriber(modid=Sit.MODID)
 public class SitHandler
 {
 	@SubscribeEvent
-	public void onRightClickBlock(RightClickBlock event)
+	public static void onRightClickBlock(RightClickBlock event)
 	{
 		if(!event.getWorld().isRemote && event.getFace() == EnumFacing.UP && !SitUtil.isPlayerSitting(event.getEntityPlayer()))
 		{
@@ -31,7 +34,7 @@ public class SitHandler
 			Block block = world.getBlockState(pos).getBlock();
 			EntityPlayer player = event.getEntityPlayer();
 
-			if((block instanceof BlockSlab || block instanceof BlockStairs || isModBlock(world, pos, block)) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty())
+			if(isValidBlock(world, pos, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty())
 			{
 				IBlockState stateAbove = world.getBlockState(pos.up());
 
@@ -54,7 +57,7 @@ public class SitHandler
 	}
 
 	@SubscribeEvent
-	public void onBreak(BreakEvent event)
+	public static void onBreak(BreakEvent event)
 	{
 		if(!event.getWorld().isRemote)
 		{
@@ -66,7 +69,7 @@ public class SitHandler
 	}
 
 	@SubscribeEvent
-	public void onEntityMount(EntityMountEvent event)
+	public static void onEntityMount(EntityMountEvent event)
 	{
 		if(!event.getWorldObj().isRemote && event.isDismounting())
 		{
@@ -78,13 +81,25 @@ public class SitHandler
 	}
 
 	/**
+	 * Returns whether or not the given block can be sat on
+	 * @param world The world to check in
+	 * @param pos The position to check at
+	 * @param block The block to check
+	 * @return true if the given block can be sat one, false otherwhise
+	 */
+	private static boolean isValidBlock(World world, BlockPos pos, Block block)
+	{
+		return (block instanceof BlockSlab || block instanceof BlockStairs || isModBlock(world, pos, block));
+	}
+
+	/**
 	 * Checks whether the given block is a specific block from a mod. Used to support stairs/slabs from other mods that don't work with Sit by default.
 	 * @param world The world to check in
 	 * @param pos The position to check at
 	 * @param block The block to check
 	 * @return true if the block is a block to additionally support, false otherwise
 	 */
-	private boolean isModBlock(World world, BlockPos pos, Block block)
+	private static boolean isModBlock(World world, BlockPos pos, Block block)
 	{
 		if(Loader.isModLoaded("immersiveengineering") && block instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 			return true;
@@ -103,5 +118,26 @@ public class SitHandler
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns whether or not the player is close enough to the block to be able to sit on it
+	 * @param player The player
+	 * @param pos The position of the block to sit on
+	 * @return true if the player is close enough, false otherwhise
+	 */
+	private static boolean isPlayerInRange(EntityPlayer player, BlockPos pos)
+	{
+		BlockPos playerPos = player.getPosition();
+
+		if(Configuration.blockReachDistance == 0) //player has to stand on top of the block
+			return playerPos.getY() - pos.getY() <= 1 && playerPos.getX() - pos.getX() == 0 && playerPos.getZ() - pos.getZ() == 0;
+
+		pos = pos.add(0.5D, 0.5D, 0.5D);
+
+		AxisAlignedBB range = new AxisAlignedBB(pos.getX() + Configuration.blockReachDistance, pos.getY() + Configuration.blockReachDistance, pos.getZ() + Configuration.blockReachDistance, pos.getX() - Configuration.blockReachDistance, pos.getY() - Configuration.blockReachDistance, pos.getZ() - Configuration.blockReachDistance);
+
+		playerPos = playerPos.add(0.5D, 0.5D, 0.5D);
+		return range.minX <= playerPos.getX() && range.minY <= playerPos.getY() && range.minZ <= playerPos.getZ() && range.maxX >= playerPos.getX() && range.maxY >= playerPos.getY() && range.maxZ >= playerPos.getZ();
 	}
 }
