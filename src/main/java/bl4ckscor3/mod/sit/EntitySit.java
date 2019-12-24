@@ -23,16 +23,13 @@ public class EntitySit extends Entity
 	}
 
 	@Override
-	protected void registerData()
-	{}
+	protected void registerData() {}
 
 	@Override
-	protected void readAdditional(CompoundNBT tag)
-	{}
+	protected void readAdditional(CompoundNBT tag) {}
 
 	@Override
-	protected void writeAdditional(CompoundNBT tag)
-	{}
+	protected void writeAdditional(CompoundNBT tag) {}
 
 	@Override
 	public IPacket<?> createSpawnPacket()
