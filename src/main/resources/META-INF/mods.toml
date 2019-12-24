@@ -3,7 +3,7 @@ loaderVersion="[30,)" #mandatory
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
-	version="v1.2.3" #mandatory
+	version="v1.3" #mandatory
 	displayName="Sit" #mandatory
 	description='''Allows you to sit on slabs and stairs.''' #mandatory
 	issueTrackerURL="http://github.com/bl4ckscor3/Sit/issues"
