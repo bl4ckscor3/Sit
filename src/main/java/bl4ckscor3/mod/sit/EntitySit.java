@@ -25,14 +25,11 @@ public class EntitySit extends Entity
 	}
 
 	@Override
-	protected void entityInit()
-	{}
+	protected void entityInit() {}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag)
-	{}
+	protected void readEntityFromNBT(NBTTagCompound tag) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag)
-	{}
+	protected void writeEntityToNBT(NBTTagCompound tag) {}
 }
