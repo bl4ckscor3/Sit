@@ -1,17 +1,19 @@
 package bl4ckscor3.mod.sit;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.SlabType;
-import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -22,12 +24,13 @@ public class Sit implements ModInitializer
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("sit", "entity_sit"),
-			FabricEntityTypeBuilder.<SitEntity>create(EntityCategory.MISC, SitEntity::new).size(EntityDimensions.fixed(0.001F, 0.001F)).build()
+			FabricEntityTypeBuilder.<SitEntity>create(SpawnGroup.MISC, SitEntity::new).dimensions(EntityDimensions.fixed(0.001F, 0.001F)).build()
 			);
 
 	@Override
 	public void onInitialize()
 	{
+		FabricDefaultAttributeRegistry.register(SIT_ENTITY_TYPE, LivingEntity.createLivingAttributes());
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();
@@ -43,7 +46,7 @@ public class Sit implements ModInitializer
 				Vec3d pos = new Vec3d(hitResult.getBlockPos().getX() + 0.5D, hitResult.getBlockPos().getY() + 0.25D, hitResult.getBlockPos().getZ() + 0.5D);
 
 				SitEntity.OCCUPIED.put(pos, sit);
-				sit.setPosition(pos.getX(), pos.getY(), pos.getZ());
+				sit.updatePosition(pos.getX(), pos.getY(), pos.getZ());
 				world.spawnEntity(sit);
 				player.startRiding(sit);
 				return ActionResult.SUCCESS;

@@ -1,1 +1,1 @@
-Download link: https://minecraft.curseforge.com/projects/sit
+Download link: https://minecraft.curseforge.com/projects/sit-fabric
