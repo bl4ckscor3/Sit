@@ -45,7 +45,7 @@ public class Sit implements ModInitializer
 				SitEntity sit = SIT_ENTITY_TYPE.create(world);
 				Vec3d pos = new Vec3d(hitResult.getBlockPos().getX() + 0.5D, hitResult.getBlockPos().getY() + 0.25D, hitResult.getBlockPos().getZ() + 0.5D);
 
-				SitEntity.OCCUPIED.put(pos, sit);
+				SitEntity.OCCUPIED.put(pos, player.getBlockPos());
 				sit.updatePosition(pos.getX(), pos.getY(), pos.getZ());
 				world.spawnEntity(sit);
 				player.startRiding(sit);

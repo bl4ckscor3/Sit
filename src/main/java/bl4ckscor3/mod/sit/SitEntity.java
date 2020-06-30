@@ -8,16 +8,18 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Arm;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class SitEntity extends LivingEntity
 {
-	public static final HashMap<Vec3d,SitEntity> OCCUPIED = new HashMap<Vec3d,SitEntity>();
+	public static final HashMap<Vec3d,BlockPos> OCCUPIED = new HashMap<>();
 
 	public SitEntity(EntityType<? extends SitEntity> type, World world)
 	{
@@ -26,15 +28,21 @@ public class SitEntity extends LivingEntity
 	}
 
 	@Override
-	public void tick()
+	public Vec3d updatePassengerForDismount(LivingEntity passenger)
 	{
-		super.tick();
-
-		if(!hasPassengers())
+		if(passenger instanceof PlayerEntity)
 		{
-			SitEntity.OCCUPIED.remove(getPos());
-			remove();
+			BlockPos pos = OCCUPIED.remove(getPos());
+
+			if(pos != null)
+			{
+				remove();
+				return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+			}
 		}
+
+		remove();
+		return super.updatePassengerForDismount(passenger);
 	}
 
 	@Override
