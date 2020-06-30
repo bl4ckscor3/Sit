@@ -3,9 +3,12 @@ package bl4ckscor3.mod.sit;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 /**
  * Use this class to manage sit entities correctly
@@ -13,28 +16,29 @@ import net.minecraft.world.IWorld;
 public class SitUtil
 {
 	/**
-	 * <dimension type id, <position, entity>>
+	 * <dimension type id, <position, <entity, previous player position>>>
 	 * This map only gets populated on server side.
 	 */
-	private static final Map<Integer,Map<BlockPos,SitEntity>> OCCUPIED = new HashMap<>();
+	private static final Map<ResourceLocation,Map<BlockPos,Pair<SitEntity,BlockPos>>> OCCUPIED = new HashMap<>();
 
 	/**
 	 * Adds a sit entity to the map that keeps track of them. This does not spawn the entity itself.
 	 * @param world The world to add the entity in
-	 * @param pos The position at which to add the entity
+	 * @param blockPos The position at which to add the entity
 	 * @param entity The entity to add
+	 * @param playerPos The position of the player who is sitting down. Used for correctly positioning the player after dismounting
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
-	public static boolean addSitEntity(IWorld world, BlockPos pos, SitEntity entity)
+	public static boolean addSitEntity(World world, BlockPos blockPos, SitEntity entity, BlockPos playerPos)
 	{
-		if(!world.isRemote())
+		if(!world.isRemote)
 		{
-			int id = getDimensionTypeId(world);
+			ResourceLocation id = getDimensionTypeId(world);
 
 			if(!OCCUPIED.containsKey(id))
 				OCCUPIED.put(id, new HashMap<>());
 
-			OCCUPIED.get(id).put(pos, entity);
+			OCCUPIED.get(id).put(blockPos, Pair.of(entity, playerPos));
 			return true;
 		}
 
@@ -47,11 +51,11 @@ public class SitUtil
 	 * @param pos The position to remove the entity from
 	 * @return true if the entity was removed, false otherwhise. This is always false on the client.
 	 */
-	public static boolean removeSitEntity(IWorld world, BlockPos pos)
+	public static boolean removeSitEntity(World world, BlockPos pos)
 	{
-		if(!world.isRemote())
+		if(!world.isRemote)
 		{
-			int id = getDimensionTypeId(world);
+			ResourceLocation id = getDimensionTypeId(world);
 
 			if(OCCUPIED.containsKey(id))
 			{
@@ -69,14 +73,39 @@ public class SitUtil
 	 * @param pos The position to get the entity from
 	 * @return The entity at the given position in the given world, null if there is none. This is always null on the client.
 	 */
-	public static SitEntity getSitEntity(IWorld world, BlockPos pos)
+	public static SitEntity getSitEntity(World world, BlockPos pos)
 	{
-		if(!world.isRemote())
+		if(!world.isRemote)
 		{
-			int id = getDimensionTypeId(world);
+			ResourceLocation id = getDimensionTypeId(world);
+
+			if(OCCUPIED.containsKey(id) && OCCUPIED.get(id).containsKey(pos))
+				return OCCUPIED.get(id).get(pos).getLeft();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Gets the position the player was at before he sat down
+	 * @param player The player
+	 * @param sitEntityThe sit entity the player is sitting on
+	 * @return The position the player was at before he sat down, null if the player is not sitting. This is always null on the client.
+	 */
+	public static BlockPos getPreviousPlayerPosition(PlayerEntity player, SitEntity sitEntity)
+	{
+		if(!player.world.isRemote)
+		{
+			ResourceLocation id = getDimensionTypeId(player.world);
 
 			if(OCCUPIED.containsKey(id))
-				return OCCUPIED.get(id).get(pos);
+			{
+				for(Pair<SitEntity,BlockPos> pair : OCCUPIED.get(id).values())
+				{
+					if(pair.getLeft() == sitEntity)
+						return pair.getRight();
+				}
+			}
 		}
 
 		return null;
@@ -88,9 +117,9 @@ public class SitUtil
 	 * @param pos The position to check at
 	 * @return true if a player is sitting at the given position in the given world, false otherwhise. This is always false on the client.
 	 */
-	public static boolean isOccupied(IWorld world, BlockPos pos)
+	public static boolean isOccupied(World world, BlockPos pos)
 	{
-		int id = getDimensionTypeId(world);
+		ResourceLocation id = getDimensionTypeId(world);
 
 		return SitUtil.OCCUPIED.containsKey(id) && SitUtil.OCCUPIED.get(id).containsKey(pos);
 	}
@@ -102,11 +131,11 @@ public class SitUtil
 	 */
 	public static boolean isPlayerSitting(PlayerEntity player)
 	{
-		for(int i : OCCUPIED.keySet())
+		for(ResourceLocation i : OCCUPIED.keySet())
 		{
-			for(SitEntity sit : OCCUPIED.get(i).values())
+			for(Pair<SitEntity,BlockPos> pair : OCCUPIED.get(i).values())
 			{
-				if(sit.isPassenger(player))
+				if(pair.getLeft().isPassenger(player))
 					return true;
 			}
 		}
@@ -114,8 +143,8 @@ public class SitUtil
 		return false;
 	}
 
-	private static int getDimensionTypeId(IWorld world)
+	private static ResourceLocation getDimensionTypeId(World world)
 	{
-		return world.getDimension().getType().getId();
+		return world.func_234922_V_().func_240901_a_();
 	}
 }

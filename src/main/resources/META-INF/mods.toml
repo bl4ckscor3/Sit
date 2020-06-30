@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[30,)" #mandatory
+loaderVersion="[32,)" #mandatory
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
@@ -7,19 +7,19 @@ loaderVersion="[30,)" #mandatory
 	displayName="Sit" #mandatory
 	description='''Allows you to sit on slabs and stairs.''' #mandatory
 	issueTrackerURL="http://github.com/bl4ckscor3/Sit/issues"
-	displayURL="http://minecraft.curseforge.com/projects/sit"
+	displayURL="https://curseforge.com/minecraft/mc-mods/sit"
 	authors="bl4ckscor3"
 
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[30,)"
+    versionRange="[32,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.sit]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15,1.16)"
+    versionRange="[1.16,1.17)"
     ordering="NONE"
     side="BOTH"

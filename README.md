@@ -1,1 +1,1 @@
-Download link: https://minecraft.curseforge.com/projects/sit
+Download link: https://curseforge.com/minecraft/mc-mods/sit

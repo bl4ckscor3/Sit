@@ -1,6 +1,6 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +28,7 @@ public class SitClient
 		}
 
 		@Override
-		public boolean func_225626_a_(SitEntity p_225626_1_, ClippingHelperImpl p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) //shouldRender
+		public boolean shouldRender(SitEntity entity, ClippingHelper camera, double camX, double camY, double camZ)
 		{
 			return false;
 		}

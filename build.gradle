@@ -11,14 +11,14 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.15.1-v1.3'
+version = '1.16.1-v1.3'
 group = 'bl4ckscor3.mod.sit'
 archivesBaseName = 'sit'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191217-1.14.3'
+    mappings channel: 'snapshot', version: '20200514-1.16'
 	
     runs {
         client {
@@ -46,8 +46,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.11'
-    compile files('libs/snowvariants-1.14.3-1.0.0-deobf.jar')
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.34'
 }
 
 jar {

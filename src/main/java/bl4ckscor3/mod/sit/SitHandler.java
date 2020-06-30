@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.state.properties.Half;
@@ -14,11 +13,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(modid=Sit.MODID)
@@ -37,14 +34,14 @@ public class SitHandler
 
 			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
 			{
-				if(block instanceof SlabBlock && (!state.has(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM))
+				if(block instanceof SlabBlock && (!state.func_235901_b_(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM)) //has
 					return;
-				else if(block instanceof StairsBlock && (!state.has(StairsBlock.HALF) || state.get(StairsBlock.HALF) != Half.BOTTOM))
+				else if(block instanceof StairsBlock && (!state.func_235901_b_(StairsBlock.HALF) || state.get(StairsBlock.HALF) != Half.BOTTOM)) //has
 					return;
 
 				SitEntity sit = new SitEntity(world, pos);
 
-				if(SitUtil.addSitEntity(world, pos, sit))
+				if(SitUtil.addSitEntity(world, pos, sit, player.func_233580_cy_())) //getPosition
 				{
 					world.addEntity(sit);
 					player.startRiding(sit);
@@ -58,22 +55,14 @@ public class SitHandler
 	{
 		if(!event.getWorld().isRemote())
 		{
-			SitEntity entity = SitUtil.getSitEntity(event.getWorld(), event.getPos());
+			//BreakEvent gets a World in its constructor, so the cast is safe
+			SitEntity entity = SitUtil.getSitEntity((World)event.getWorld(), event.getPos());
 
-			if(entity != null && SitUtil.removeSitEntity(event.getWorld(), event.getPos()))
-				entity.remove();
-		}
-	}
-
-	@SubscribeEvent
-	public static void onEntityMount(EntityMountEvent event)
-	{
-		if(!event.getWorldObj().isRemote && event.isDismounting())
-		{
-			Entity player = event.getEntityBeingMounted();
-
-			if(player instanceof SitEntity && SitUtil.removeSitEntity(event.getWorldObj(), player.getPosition()))
-				player.remove();
+			if(entity != null)
+			{
+				SitUtil.removeSitEntity((World)event.getWorld(), event.getPos());
+				entity.removePassengers();
+			}
 		}
 	}
 
@@ -101,7 +90,7 @@ public class SitHandler
 	}
 
 	/**
-	 * Checks wether the given block is a specific block from a mod. Used to support
+	 * Checks whether the given block is a specific block from a mod. Used to support
 	 * stairs/slabs from other mods that don't work with Sit by default.
 	 * @param block The block to check
 	 * @return true if the block is a block to additionally support, false otherwise
@@ -110,9 +99,9 @@ public class SitHandler
 	{
 		/*		if(ModList.get().isLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
 					return true;
-		else*/ if(ModList.get().isLoaded("snowvariants") && block instanceof trikzon.snowvariants.blocks.SnowSlab)
+		else if(ModList.get().isLoaded("snowvariants") && block instanceof trikzon.snowvariants.blocks.SnowSlab)
 			return true;
-		else return false;
+		else*/ return false;
 	}
 
 	/**
@@ -123,7 +112,7 @@ public class SitHandler
 	 */
 	private static boolean isPlayerInRange(PlayerEntity player, BlockPos pos)
 	{
-		BlockPos playerPos = player.getPosition();
+		BlockPos playerPos = player.func_233580_cy_(); //getPosition
 		int blockReachDistance = Configuration.CONFIG.blockReachDistance.get();
 
 		if(blockReachDistance == 0) //player has to stand on top of the block
