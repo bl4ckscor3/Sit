@@ -16,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
@@ -32,6 +33,12 @@ public class Sit implements ModInitializer
 	{
 		FabricDefaultAttributeRegistry.register(SIT_ENTITY_TYPE, LivingEntity.createLivingAttributes());
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			Vec3d comparePos = new Vec3d(player.getBlockPos().getX() + 0.5D, player.getBlockPos().getY() + 1.25D, player.getBlockPos().getZ() + 0.5D);
+
+			//only allow sitting when rightclicking the top face of a block, and disallow sitting players from sitting again
+			if(hitResult.getSide() != Direction.UP || SitEntity.OCCUPIED.containsKey(comparePos))
+				return ActionResult.FAIL;
+
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();
 

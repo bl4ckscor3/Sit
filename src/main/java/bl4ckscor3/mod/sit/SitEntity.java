@@ -46,12 +46,6 @@ public class SitEntity extends LivingEntity
 	}
 
 	@Override
-	public  void initDataTracker()
-	{
-		super.initDataTracker();
-	}
-
-	@Override
 	public void readCustomDataFromTag(CompoundTag tag) {}
 
 	@Override
