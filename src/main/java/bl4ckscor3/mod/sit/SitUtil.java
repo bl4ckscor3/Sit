@@ -145,6 +145,6 @@ public class SitUtil
 
 	private static ResourceLocation getDimensionTypeId(World world)
 	{
-		return world.func_234922_V_().func_240901_a_();
+		return world.func_234923_W_().func_240901_a_();
 	}
 }

@@ -1,5 +1,6 @@
 modLoader="javafml" #mandatory
-loaderVersion="[32,)" #mandatory
+loaderVersion="[33,)" #mandatory
+license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.16/LICENSE"
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
@@ -13,7 +14,7 @@ loaderVersion="[32,)" #mandatory
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[33,)"
     ordering="NONE"
     side="BOTH"
 

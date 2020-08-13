@@ -40,7 +40,7 @@ public class SitEntity extends Entity
 		}
 
 		remove();
-		return new Vector3d(getPosX(), getPosY() + getHeight(), getPosZ());
+		return super.func_230268_c_(passenger);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SitEntity extends Entity
 	{
 		super.remove();
 
-		SitUtil.removeSitEntity(world, func_233580_cy_()); //getPosition
+		SitUtil.removeSitEntity(world, getPosition());
 	}
 
 	@Override

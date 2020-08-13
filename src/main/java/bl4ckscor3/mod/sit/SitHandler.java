@@ -34,14 +34,14 @@ public class SitHandler
 
 			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
 			{
-				if(block instanceof SlabBlock && (!state.func_235901_b_(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM)) //has
+				if(block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
-				else if(block instanceof StairsBlock && (!state.func_235901_b_(StairsBlock.HALF) || state.get(StairsBlock.HALF) != Half.BOTTOM)) //has
+				else if(block instanceof StairsBlock && (!state.hasProperty(StairsBlock.HALF) || state.get(StairsBlock.HALF) != Half.BOTTOM))
 					return;
 
 				SitEntity sit = new SitEntity(world, pos);
 
-				if(SitUtil.addSitEntity(world, pos, sit, player.func_233580_cy_())) //getPosition
+				if(SitUtil.addSitEntity(world, pos, sit, player.getPosition()))
 				{
 					world.addEntity(sit);
 					player.startRiding(sit);
@@ -112,7 +112,7 @@ public class SitHandler
 	 */
 	private static boolean isPlayerInRange(PlayerEntity player, BlockPos pos)
 	{
-		BlockPos playerPos = player.func_233580_cy_(); //getPosition
+		BlockPos playerPos = player.getPosition();
 		int blockReachDistance = Configuration.CONFIG.blockReachDistance.get();
 
 		if(blockReachDistance == 0) //player has to stand on top of the block
