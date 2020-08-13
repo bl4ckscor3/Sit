@@ -33,17 +33,17 @@ public class Sit implements ModInitializer
 	{
 		FabricDefaultAttributeRegistry.register(SIT_ENTITY_TYPE, LivingEntity.createLivingAttributes());
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-			Vec3d comparePos = new Vec3d(player.getBlockPos().getX() + 0.5D, player.getBlockPos().getY() + 1.25D, player.getBlockPos().getZ() + 0.5D);
-
-			//only allow sitting when rightclicking the top face of a block, and disallow sitting players from sitting again
-			if(hitResult.getSide() != Direction.UP || SitEntity.OCCUPIED.containsKey(comparePos))
-				return ActionResult.FAIL;
-
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();
 
 			if((b instanceof SlabBlock || b instanceof StairsBlock) && !SitEntity.OCCUPIED.containsKey(new Vec3d(hitResult.getBlockPos().getX(), hitResult.getBlockPos().getY(), hitResult.getBlockPos().getZ())) && player.getStackInHand(hand).isEmpty())
 			{
+				Vec3d comparePos = new Vec3d(player.getBlockPos().getX() + 0.5D, player.getBlockPos().getY() + 1.25D, player.getBlockPos().getZ() + 0.5D);
+
+				//only allow sitting when rightclicking the top face of a block, and disallow sitting players from sitting again
+				if(hitResult.getSide() != Direction.UP || SitEntity.OCCUPIED.containsKey(comparePos))
+					return ActionResult.FAIL;
+
 				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return ActionResult.PASS;
 				else if(b instanceof StairsBlock && (!s.getProperties().contains(StairsBlock.HALF) || s.get(StairsBlock.HALF) != BlockHalf.BOTTOM))
