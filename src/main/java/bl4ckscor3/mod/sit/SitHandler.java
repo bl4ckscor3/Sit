@@ -24,13 +24,14 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(event.getPlayer()))
+		PlayerEntity player = event.getPlayer();
+
+		if(!event.getWorld().isRemote && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isSneaking())
 		{
 			World world = event.getWorld();
 			BlockPos pos = event.getPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = world.getBlockState(pos).getBlock();
-			PlayerEntity player = event.getPlayer();
 
 			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
 			{
