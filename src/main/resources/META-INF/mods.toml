@@ -1,9 +1,9 @@
 modLoader="javafml" #mandatory
-loaderVersion="[30,)" #mandatory
+loaderVersion="[31,)" #mandatory
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
-	version="v1.3" #mandatory
+	version="${version}" #mandatory
 	displayName="Sit" #mandatory
 	description='''Allows you to sit on slabs and stairs.''' #mandatory
 	issueTrackerURL="http://github.com/bl4ckscor3/Sit/issues"
@@ -13,7 +13,7 @@ loaderVersion="[30,)" #mandatory
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[30,)"
+    versionRange="[31,)"
     ordering="NONE"
     side="BOTH"
 

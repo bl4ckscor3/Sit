@@ -11,18 +11,18 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.15.1-v1.3'
+version = 'v1.3'
 group = 'bl4ckscor3.mod.sit'
-archivesBaseName = 'sit'
+archivesBaseName = 'sit-1.15.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191217-1.14.3'
+    mappings channel: 'snapshot', version: '20210311-1.15.1'
 	
     runs {
         client {
-		    workingDirectory project.file('run')
+		    workingDirectory project.file('run/client')
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -33,8 +33,9 @@ minecraft {
         }
 
         server {
-		    workingDirectory project.file('run')
+		    workingDirectory project.file('run/server')
             property 'forge.logging.console.level', 'debug'
+            args '-nogui'
 
             mods {
                 sit {
@@ -46,17 +47,31 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.11'
-    compile files('libs/snowvariants-1.14.3-1.0.0-deobf.jar')
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.49'
+}
+
+processResources {  
+	//replace ${version} in mods.toml
+	inputs.property 'version', project.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include 'META-INF/mods.toml'
+
+		expand 'version': project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'META-INF/mods.toml'
+	}
 }
 
 jar {
     manifest {
         attributes(["Specification-Title": "Sit",
                     "Specification-Vendor": "bl4ckscor3",
-                    "Specification-Version": "v1.3",
+                    "Specification-Version": "${version}",
                     "Implementation-Title": "Sit",
-                    "Implementation-Version": "v1.3",
+                    "Implementation-Version": "${version}",
                     "Implementation-Vendor" :"bl4ckscor3",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }

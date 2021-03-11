@@ -18,7 +18,6 @@ import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(modid=Sit.MODID)
@@ -87,7 +86,7 @@ public class SitHandler
 	 */
 	private static boolean isValidBlock(World world, BlockPos pos, BlockState state, Block block)
 	{
-		boolean isValid = block instanceof SlabBlock || block instanceof StairsBlock || isModBlock(block);
+		boolean isValid = block instanceof SlabBlock || block instanceof StairsBlock;
 
 		if(!isValid && block instanceof BedBlock)
 		{
@@ -98,21 +97,6 @@ public class SitHandler
 		}
 
 		return isValid;
-	}
-
-	/**
-	 * Checks wether the given block is a specific block from a mod. Used to support
-	 * stairs/slabs from other mods that don't work with Sit by default.
-	 * @param block The block to check
-	 * @return true if the block is a block to additionally support, false otherwise
-	 */
-	private static boolean isModBlock(Block block)
-	{
-		/*		if(ModList.get().isLoaded("immersiveengineering") && b instanceof blusunrize.immersiveengineering.common.blocks.BlockIESlab)
-					return true;
-		else*/ if(ModList.get().isLoaded("snowvariants") && block instanceof trikzon.snowvariants.blocks.SnowSlab)
-			return true;
-		else return false;
 	}
 
 	/**

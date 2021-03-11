@@ -28,7 +28,7 @@ public class SitClient
 		}
 
 		@Override
-		public boolean func_225626_a_(SitEntity p_225626_1_, ClippingHelperImpl p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) //shouldRender
+		public boolean shouldRender(SitEntity entity, ClippingHelperImpl clippingHelper, double x, double y, double z)
 		{
 			return false;
 		}
