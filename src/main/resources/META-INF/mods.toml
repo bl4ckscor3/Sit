@@ -4,7 +4,7 @@ license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.16/LICENSE"
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
-	version="v1.3" #mandatory
+	version="${version}" #mandatory
 	displayName="Sit" #mandatory
 	description='''Allows you to sit on slabs and stairs.''' #mandatory
 	issueTrackerURL="http://github.com/bl4ckscor3/Sit/issues"

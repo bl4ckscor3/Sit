@@ -26,7 +26,7 @@ public class SitEntity extends Entity
 	}
 
 	@Override
-	public Vector3d func_230268_c_(LivingEntity passenger) //getPositionAfterDismount
+	public Vector3d getDismountPosition(LivingEntity passenger)
 	{
 		if(passenger instanceof PlayerEntity)
 		{
@@ -40,7 +40,7 @@ public class SitEntity extends Entity
 		}
 
 		remove();
-		return super.func_230268_c_(passenger);
+		return super.getDismountPosition(passenger);
 	}
 
 	@Override

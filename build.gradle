@@ -11,18 +11,18 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.16.2-v1.3'
+version = 'v1.3'
 group = 'bl4ckscor3.mod.sit'
-archivesBaseName = 'sit'
+archivesBaseName = 'sit-1.16.5'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200723-1.16.1'
+    mappings channel: 'snapshot', version: '20210309-1.16.4'
 	
     runs {
         client {
-		    workingDirectory project.file('run')
+		    workingDirectory project.file('run/client')
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -33,8 +33,9 @@ minecraft {
         }
 
         server {
-		    workingDirectory project.file('run')
+		    workingDirectory project.file('run/server')
             property 'forge.logging.console.level', 'debug'
+            args '-nogui'
 
             mods {
                 sit {
@@ -46,16 +47,31 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.2-33.0.0'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.48'
+}
+
+processResources {
+	//replace ${version} in mods.toml
+	inputs.property 'version', project.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include 'META-INF/mods.toml'
+
+		expand 'version': project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'META-INF/mods.toml'
+	}
 }
 
 jar {
     manifest {
         attributes(["Specification-Title": "Sit",
                     "Specification-Vendor": "bl4ckscor3",
-                    "Specification-Version": "v1.3",
+                    "Specification-Version": "${version}",
                     "Implementation-Title": "Sit",
-                    "Implementation-Version": "v1.3",
+                    "Implementation-Version": "${version}",
                     "Implementation-Vendor" :"bl4ckscor3",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
