@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "sit",
   "version": "${version}",
-
   "name": "Sit",
   "description": "Adds the ability to sit on slabs and stairs.",
   "authors": [
@@ -12,10 +11,8 @@
     "homepage": "https://curseforge.com/minecraft/mc-mods/sit-fabric",
     "sources": "https://github.com/bl4ckscor3/Sit/tree/1.16-fabric"
   },
-
   "license": "GPL-3.0",
   "icon": "assets/sit/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -28,7 +25,9 @@
       "bl4ckscor3.mod.sit.SitClient"
     ]
   },
-
+  "mixins": [
+    "sit.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": ">=0.28.0"
