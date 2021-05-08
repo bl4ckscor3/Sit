@@ -14,6 +14,8 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -22,16 +24,21 @@ import net.minecraft.util.registry.Registry;
 
 public class Sit implements ModInitializer
 {
+	public static final int PROTOCOL_VERSION = 10;
+	public static final Identifier VERSION_CHECK = new Identifier("sit", "version_check");
+	public static final Text INCORRECT_VERSION = new LiteralText(String.format("Please install Sit 1.16.5-%d to play on this server.", PROTOCOL_VERSION));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("sit", "entity_sit"),
 			FabricEntityTypeBuilder.<SitEntity>create(SpawnGroup.MISC, SitEntity::new).dimensions(EntityDimensions.fixed(0.001F, 0.001F)).build()
-			);
+	);
 
 	@Override
 	public void onInitialize()
 	{
+		//register entity type
 		FabricDefaultAttributeRegistry.register(SIT_ENTITY_TYPE, LivingEntity.createLivingAttributes());
+		//sit handling
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();

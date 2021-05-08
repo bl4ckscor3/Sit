@@ -21,13 +21,16 @@
     "main": [
       "bl4ckscor3.mod.sit.Sit"
     ],
+    "server": [
+      "bl4ckscor3.mod.sit.SitServer"
+    ],
     "client": [
       "bl4ckscor3.mod.sit.SitClient"
     ]
   },
 
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabricloader": ">=0.28.0",
     "fabric": "*"
   },
   "suggests": {
