@@ -12,6 +12,7 @@ import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -22,9 +23,9 @@ import net.minecraft.util.registry.Registry;
 
 public class Sit implements ModInitializer
 {
-	public static final int PROTOCOL_VERSION = 11;
+	public static final int PROTOCOL_VERSION = 12;
 	public static final Identifier VERSION_CHECK = new Identifier("sit", "version_check");
-	public static final Text INCORRECT_VERSION = new LiteralText(String.format("Please install Sit 1.16.5-%d to play on this server.", PROTOCOL_VERSION));
+	public static final Text INCORRECT_VERSION = new LiteralText(String.format("Please install Sit 1.17-%d to play on this server.", PROTOCOL_VERSION));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("sit", "entity_sit"),
@@ -36,6 +37,12 @@ public class Sit implements ModInitializer
 	{
 		//sit handling
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			if(world.isClient)
+				return ActionResult.PASS;
+
+			if(player.isBlockBreakingRestricted(world, hitResult.getBlockPos(), ((ServerPlayerEntity)player).interactionManager.getGameMode()))
+				return ActionResult.FAIL;
+
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();
 

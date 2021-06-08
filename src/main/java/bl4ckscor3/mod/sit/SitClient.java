@@ -9,8 +9,8 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +22,7 @@ public class SitClient implements ClientModInitializer
 	@Override
 	public void onInitializeClient()
 	{
-		EntityRendererRegistry.INSTANCE.register(Sit.SIT_ENTITY_TYPE, (entityRenderDispatcher, context) -> new EmptyRenderer(entityRenderDispatcher));
+		EntityRendererRegistry.INSTANCE.register(Sit.SIT_ENTITY_TYPE, EmptyRenderer::new);
 		ClientLoginNetworking.registerGlobalReceiver(Sit.VERSION_CHECK, this::onServerRequest);
 	}
 
@@ -37,9 +37,9 @@ public class SitClient implements ClientModInitializer
 
 	private static class EmptyRenderer extends EntityRenderer<SitEntity>
 	{
-		protected EmptyRenderer(EntityRenderDispatcher entityRenderDispatcher)
+		protected EmptyRenderer(EntityRendererFactory.Context ctx)
 		{
-			super(entityRenderDispatcher);
+			super(ctx);
 		}
 
 		@Override

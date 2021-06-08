@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.BlockPos;
@@ -37,32 +37,31 @@ public class SitEntity extends Entity
 
 			if(pos != null)
 			{
-				remove();
+				remove(RemovalReason.DISCARDED);
 				return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 
-		remove();
+		remove(RemovalReason.DISCARDED);
 		return super.updatePassengerForDismount(passenger);
 	}
 
 	@Override
-	public void remove()
+	public void remove(RemovalReason reason)
 	{
-		super.remove();
+		super.remove(reason);
 
 		OCCUPIED.remove(getPos());
 	}
-
 
 	@Override
 	protected void initDataTracker() {}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {}
+	public void readCustomDataFromNbt(NbtCompound nbt) {}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {}
+	public void writeCustomDataToNbt(NbtCompound nbt) {}
 
 	@Override
 	public Packet<?> createSpawnPacket()
