@@ -31,7 +31,7 @@ public class SitUtil
 	 */
 	public static boolean addSitEntity(World world, BlockPos blockPos, SitEntity entity, BlockPos playerPos)
 	{
-		if(!world.isRemote)
+		if(!world.isClientSide)
 		{
 			ResourceLocation id = getDimensionTypeId(world);
 
@@ -53,7 +53,7 @@ public class SitUtil
 	 */
 	public static boolean removeSitEntity(World world, BlockPos pos)
 	{
-		if(!world.isRemote)
+		if(!world.isClientSide)
 		{
 			ResourceLocation id = getDimensionTypeId(world);
 
@@ -75,7 +75,7 @@ public class SitUtil
 	 */
 	public static SitEntity getSitEntity(World world, BlockPos pos)
 	{
-		if(!world.isRemote)
+		if(!world.isClientSide)
 		{
 			ResourceLocation id = getDimensionTypeId(world);
 
@@ -94,9 +94,9 @@ public class SitUtil
 	 */
 	public static BlockPos getPreviousPlayerPosition(PlayerEntity player, SitEntity sitEntity)
 	{
-		if(!player.world.isRemote)
+		if(!player.level.isClientSide)
 		{
-			ResourceLocation id = getDimensionTypeId(player.world);
+			ResourceLocation id = getDimensionTypeId(player.level);
 
 			if(OCCUPIED.containsKey(id))
 			{
@@ -135,7 +135,7 @@ public class SitUtil
 		{
 			for(Pair<SitEntity,BlockPos> pair : OCCUPIED.get(i).values())
 			{
-				if(pair.getLeft().isPassenger(player))
+				if(pair.getLeft().hasPassenger(player))
 					return true;
 			}
 		}
@@ -145,6 +145,6 @@ public class SitUtil
 
 	private static ResourceLocation getDimensionTypeId(World world)
 	{
-		return world.getDimensionKey().getLocation();
+		return world.dimension().location();
 	}
 }

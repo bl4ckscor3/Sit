@@ -34,7 +34,7 @@ public class SitClient
 		}
 
 		@Override
-		public ResourceLocation getEntityTexture(SitEntity entity)
+		public ResourceLocation getTextureLocation(SitEntity entity)
 		{
 			return null;
 		}

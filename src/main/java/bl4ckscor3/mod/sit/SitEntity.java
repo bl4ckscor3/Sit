@@ -21,12 +21,12 @@ public class SitEntity extends Entity
 	public SitEntity(World world, BlockPos pos)
 	{
 		super(Sit.SIT_ENTITY_TYPE, world);
-		setPosition(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
-		noClip = true;
+		setPos(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
+		noPhysics = true;
 	}
 
 	@Override
-	public Vector3d getDismountPosition(LivingEntity passenger)
+	public Vector3d getDismountLocationForPassenger(LivingEntity passenger)
 	{
 		if(passenger instanceof PlayerEntity)
 		{
@@ -40,7 +40,7 @@ public class SitEntity extends Entity
 		}
 
 		remove();
-		return super.getDismountPosition(passenger);
+		return super.getDismountLocationForPassenger(passenger);
 	}
 
 	@Override
@@ -48,20 +48,20 @@ public class SitEntity extends Entity
 	{
 		super.remove();
 
-		SitUtil.removeSitEntity(world, getPosition());
+		SitUtil.removeSitEntity(level, blockPosition());
 	}
 
 	@Override
-	protected void registerData() {}
+	protected void defineSynchedData() {}
 
 	@Override
-	protected void readAdditional(CompoundNBT tag) {}
+	protected void readAdditionalSaveData(CompoundNBT tag) {}
 
 	@Override
-	protected void writeAdditional(CompoundNBT tag) {}
+	protected void addAdditionalSaveData(CompoundNBT tag) {}
 
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

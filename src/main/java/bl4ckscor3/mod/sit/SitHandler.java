@@ -26,25 +26,25 @@ public class SitHandler
 	{
 		PlayerEntity player = event.getPlayer();
 
-		if(!event.getWorld().isRemote && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isSneaking())
+		if(!event.getWorld().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown())
 		{
 			World world = event.getWorld();
 			BlockPos pos = event.getPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = world.getBlockState(pos).getBlock();
 
-			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getHeldItemMainhand().isEmpty() && world.getBlockState(pos.up()).isAir(world, pos.up()))
+			if(isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getMainHandItem().isEmpty() && world.getBlockState(pos.above()).isAir(world, pos.above()))
 			{
-				if(block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.get(SlabBlock.TYPE) != SlabType.BOTTOM))
+				if(block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
-				else if(block instanceof StairsBlock && (!state.hasProperty(StairsBlock.HALF) || state.get(StairsBlock.HALF) != Half.BOTTOM))
+				else if(block instanceof StairsBlock && (!state.hasProperty(StairsBlock.HALF) || state.getValue(StairsBlock.HALF) != Half.BOTTOM))
 					return;
 
 				SitEntity sit = new SitEntity(world, pos);
 
-				if(SitUtil.addSitEntity(world, pos, sit, player.getPosition()))
+				if(SitUtil.addSitEntity(world, pos, sit, player.blockPosition()))
 				{
-					world.addEntity(sit);
+					world.addFreshEntity(sit);
 					player.startRiding(sit);
 				}
 			}
@@ -54,7 +54,7 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onBreak(BreakEvent event)
 	{
-		if(!event.getWorld().isRemote())
+		if(!event.getWorld().isClientSide())
 		{
 			//BreakEvent gets a World in its constructor, so the cast is safe
 			SitEntity entity = SitUtil.getSitEntity((World)event.getWorld(), event.getPos());
@@ -62,7 +62,7 @@ public class SitHandler
 			if(entity != null)
 			{
 				SitUtil.removeSitEntity((World)event.getWorld(), event.getPos());
-				entity.removePassengers();
+				entity.ejectPassengers();
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class SitHandler
 
 		if(!isValid && block instanceof BedBlock)
 		{
-			state = world.getBlockState(pos.offset(state.get(BedBlock.PART) == BedPart.HEAD ? state.get(BedBlock.HORIZONTAL_FACING).getOpposite() : state.get(BedBlock.HORIZONTAL_FACING)));
+			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(BedBlock.FACING).getOpposite() : state.getValue(BedBlock.FACING)));
 
 			if(!(state.getBlock() instanceof BedBlock)) //it's half a bed!
 				isValid = true;
@@ -113,17 +113,17 @@ public class SitHandler
 	 */
 	private static boolean isPlayerInRange(PlayerEntity player, BlockPos pos)
 	{
-		BlockPos playerPos = player.getPosition();
+		BlockPos playerPos = player.blockPosition();
 		int blockReachDistance = Configuration.CONFIG.blockReachDistance.get();
 
 		if(blockReachDistance == 0) //player has to stand on top of the block
 			return playerPos.getY() - pos.getY() <= 1 && playerPos.getX() - pos.getX() == 0 && playerPos.getZ() - pos.getZ() == 0;
 
-		pos = pos.add(0.5D, 0.5D, 0.5D);
+		pos = pos.offset(0.5D, 0.5D, 0.5D);
 
 		AxisAlignedBB range = new AxisAlignedBB(pos.getX() + blockReachDistance, pos.getY() + blockReachDistance, pos.getZ() + blockReachDistance, pos.getX() - blockReachDistance, pos.getY() - blockReachDistance, pos.getZ() - blockReachDistance);
 
-		playerPos = playerPos.add(0.5D, 0.5D, 0.5D);
+		playerPos = playerPos.offset(0.5D, 0.5D, 0.5D);
 		return range.minX <= playerPos.getX() && range.minY <= playerPos.getY() && range.minZ <= playerPos.getZ() && range.maxX >= playerPos.getX() && range.maxY >= playerPos.getY() && range.maxZ >= playerPos.getZ();
 	}
 }
