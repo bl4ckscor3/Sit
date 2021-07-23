@@ -1,9 +1,9 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.client.renderer.culling.ClippingHelper;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -22,13 +22,13 @@ public class SitClient
 
 	private static class EmptyRenderer extends EntityRenderer<SitEntity>
 	{
-		protected EmptyRenderer(EntityRendererManager renderManager)
+		protected EmptyRenderer(EntityRenderDispatcher renderManager)
 		{
 			super(renderManager);
 		}
 
 		@Override
-		public boolean shouldRender(SitEntity entity, ClippingHelper camera, double camX, double camY, double camZ)
+		public boolean shouldRender(SitEntity entity, Frustum camera, double camX, double camY, double camZ)
 		{
 			return false;
 		}

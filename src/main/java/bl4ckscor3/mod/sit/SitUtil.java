@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * Use this class to manage sit entities correctly
@@ -29,7 +29,7 @@ public class SitUtil
 	 * @param playerPos The position of the player who is sitting down. Used for correctly positioning the player after dismounting
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
-	public static boolean addSitEntity(World world, BlockPos blockPos, SitEntity entity, BlockPos playerPos)
+	public static boolean addSitEntity(Level world, BlockPos blockPos, SitEntity entity, BlockPos playerPos)
 	{
 		if(!world.isClientSide)
 		{
@@ -51,7 +51,7 @@ public class SitUtil
 	 * @param pos The position to remove the entity from
 	 * @return true if the entity was removed, false otherwhise. This is always false on the client.
 	 */
-	public static boolean removeSitEntity(World world, BlockPos pos)
+	public static boolean removeSitEntity(Level world, BlockPos pos)
 	{
 		if(!world.isClientSide)
 		{
@@ -73,7 +73,7 @@ public class SitUtil
 	 * @param pos The position to get the entity from
 	 * @return The entity at the given position in the given world, null if there is none. This is always null on the client.
 	 */
-	public static SitEntity getSitEntity(World world, BlockPos pos)
+	public static SitEntity getSitEntity(Level world, BlockPos pos)
 	{
 		if(!world.isClientSide)
 		{
@@ -92,7 +92,7 @@ public class SitUtil
 	 * @param sitEntityThe sit entity the player is sitting on
 	 * @return The position the player was at before he sat down, null if the player is not sitting. This is always null on the client.
 	 */
-	public static BlockPos getPreviousPlayerPosition(PlayerEntity player, SitEntity sitEntity)
+	public static BlockPos getPreviousPlayerPosition(Player player, SitEntity sitEntity)
 	{
 		if(!player.level.isClientSide)
 		{
@@ -117,7 +117,7 @@ public class SitUtil
 	 * @param pos The position to check at
 	 * @return true if a player is sitting at the given position in the given world, false otherwhise. This is always false on the client.
 	 */
-	public static boolean isOccupied(World world, BlockPos pos)
+	public static boolean isOccupied(Level world, BlockPos pos)
 	{
 		ResourceLocation id = getDimensionTypeId(world);
 
@@ -129,7 +129,7 @@ public class SitUtil
 	 * @param player The player to check
 	 * @return true if the given player is sitting anywhere, false otherwhise
 	 */
-	public static boolean isPlayerSitting(PlayerEntity player)
+	public static boolean isPlayerSitting(Player player)
 	{
 		for(ResourceLocation i : OCCUPIED.keySet())
 		{
@@ -143,7 +143,7 @@ public class SitUtil
 		return false;
 	}
 
-	private static ResourceLocation getDimensionTypeId(World world)
+	private static ResourceLocation getDimensionTypeId(Level world)
 	{
 		return world.dimension().location();
 	}

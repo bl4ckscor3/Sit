@@ -1,18 +1,18 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,11 +24,11 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event)
 	{
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 
 		if(!event.getWorld().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown())
 		{
-			World world = event.getWorld();
+			Level world = event.getWorld();
 			BlockPos pos = event.getPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = world.getBlockState(pos).getBlock();
@@ -37,7 +37,7 @@ public class SitHandler
 			{
 				if(block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
-				else if(block instanceof StairsBlock && (!state.hasProperty(StairsBlock.HALF) || state.getValue(StairsBlock.HALF) != Half.BOTTOM))
+				else if(block instanceof StairBlock && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM))
 					return;
 
 				SitEntity sit = new SitEntity(world, pos);
@@ -57,11 +57,11 @@ public class SitHandler
 		if(!event.getWorld().isClientSide())
 		{
 			//BreakEvent gets a World in its constructor, so the cast is safe
-			SitEntity entity = SitUtil.getSitEntity((World)event.getWorld(), event.getPos());
+			SitEntity entity = SitUtil.getSitEntity((Level)event.getWorld(), event.getPos());
 
 			if(entity != null)
 			{
-				SitUtil.removeSitEntity((World)event.getWorld(), event.getPos());
+				SitUtil.removeSitEntity((Level)event.getWorld(), event.getPos());
 				entity.ejectPassengers();
 			}
 		}
@@ -75,9 +75,9 @@ public class SitHandler
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
-	private static boolean isValidBlock(World world, BlockPos pos, BlockState state, Block block)
+	private static boolean isValidBlock(Level world, BlockPos pos, BlockState state, Block block)
 	{
-		boolean isValid = block instanceof SlabBlock || block instanceof StairsBlock || isModBlock(block);
+		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock || isModBlock(block);
 
 		if(!isValid && block instanceof BedBlock)
 		{
@@ -111,7 +111,7 @@ public class SitHandler
 	 * @param pos The position of the block to sit on
 	 * @return true if the player is close enough, false otherwhise
 	 */
-	private static boolean isPlayerInRange(PlayerEntity player, BlockPos pos)
+	private static boolean isPlayerInRange(Player player, BlockPos pos)
 	{
 		BlockPos playerPos = player.blockPosition();
 		int blockReachDistance = Configuration.CONFIG.blockReachDistance.get();
@@ -121,7 +121,7 @@ public class SitHandler
 
 		pos = pos.offset(0.5D, 0.5D, 0.5D);
 
-		AxisAlignedBB range = new AxisAlignedBB(pos.getX() + blockReachDistance, pos.getY() + blockReachDistance, pos.getZ() + blockReachDistance, pos.getX() - blockReachDistance, pos.getY() - blockReachDistance, pos.getZ() - blockReachDistance);
+		AABB range = new AABB(pos.getX() + blockReachDistance, pos.getY() + blockReachDistance, pos.getZ() + blockReachDistance, pos.getX() - blockReachDistance, pos.getY() - blockReachDistance, pos.getZ() - blockReachDistance);
 
 		playerPos = playerPos.offset(0.5D, 0.5D, 0.5D);
 		return range.minX <= playerPos.getX() && range.minY <= playerPos.getY() && range.minZ <= playerPos.getZ() && range.maxX >= playerPos.getX() && range.maxY >= playerPos.getY() && range.maxZ >= playerPos.getZ();

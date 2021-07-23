@@ -1,8 +1,8 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -28,7 +28,7 @@ public class Sit
 	@SubscribeEvent
 	public static void registerEntity(RegistryEvent.Register<EntityType<?>> event)
 	{
-		event.getRegistry().register(EntityType.Builder.<SitEntity>of(SitEntity::new, EntityClassification.MISC)
+		event.getRegistry().register(EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC)
 				.setCustomClientFactory((spawnEntity, world) -> SIT_ENTITY_TYPE.create(world))
 				.setTrackingRange(256)
 				.setUpdateInterval(20)
