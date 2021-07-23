@@ -2,11 +2,11 @@ package bl4ckscor3.mod.sit;
 
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -17,14 +17,14 @@ public class SitClient
 	@SubscribeEvent
 	public static void onFMLCLientSetup(FMLClientSetupEvent event)
 	{
-		RenderingRegistry.registerEntityRenderingHandler(Sit.SIT_ENTITY_TYPE, EmptyRenderer::new);
+		EntityRenderers.register(Sit.SIT_ENTITY_TYPE, EmptyRenderer::new);
 	}
 
 	private static class EmptyRenderer extends EntityRenderer<SitEntity>
 	{
-		protected EmptyRenderer(EntityRenderDispatcher renderManager)
+		protected EmptyRenderer(EntityRendererProvider.Context ctx)
 		{
-			super(renderManager);
+			super(ctx);
 		}
 
 		@Override
