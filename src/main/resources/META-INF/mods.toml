@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="[37,)" #mandatory
-license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.16/LICENSE"
+license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.17/LICENSE"
 
 [[mods]] #mandatory
 	modId="sit" #mandatory
