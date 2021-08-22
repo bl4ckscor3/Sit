@@ -12,6 +12,7 @@ import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -40,7 +41,7 @@ public class Sit implements ModInitializer
 			if(world.isClient)
 				return ActionResult.PASS;
 
-			if(player.isBlockBreakingRestricted(world, hitResult.getBlockPos(), ((ServerPlayerEntity)player).interactionManager.getGameMode()))
+			if(!world.canPlayerModifyAt(player, hitResult.getBlockPos()))
 				return ActionResult.PASS;
 
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
