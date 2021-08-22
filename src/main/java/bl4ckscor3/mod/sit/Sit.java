@@ -41,7 +41,7 @@ public class Sit implements ModInitializer
 				return ActionResult.PASS;
 
 			if(player.isBlockBreakingRestricted(world, hitResult.getBlockPos(), ((ServerPlayerEntity)player).interactionManager.getGameMode()))
-				return ActionResult.FAIL;
+				return ActionResult.PASS;
 
 			BlockState s = world.getBlockState(hitResult.getBlockPos());
 			Block b = world.getBlockState(hitResult.getBlockPos()).getBlock();
@@ -52,7 +52,7 @@ public class Sit implements ModInitializer
 
 				//only allow sitting when rightclicking the top face of a block, and disallow sitting players from sitting again
 				if(hitResult.getSide() != Direction.UP || SitEntity.OCCUPIED.containsKey(comparePos))
-					return ActionResult.FAIL;
+					return ActionResult.PASS;
 
 				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.TYPE) || s.get(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return ActionResult.PASS;
