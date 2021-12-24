@@ -35,7 +35,7 @@ public class SitServer implements DedicatedServerModInitializer
 	private void onClientResponse(MinecraftServer server, ServerLoginNetworkHandler listener, boolean understood, PacketByteBuf buf, ServerLoginNetworking.LoginSynchronizer loginSynchronizer, PacketSender packetSender)
 	{
 		//client did not respond in time or doesn't use the correct version, disconnect client
-		if(!understood || buf.readInt() != Sit.PROTOCOL_VERSION)
+		if(!understood || buf.readInt() != Sit.getModVersion())
 			listener.disconnect(Sit.INCORRECT_VERSION);
 	}
 }

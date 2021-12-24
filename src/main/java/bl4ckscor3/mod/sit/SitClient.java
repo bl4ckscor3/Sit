@@ -31,7 +31,7 @@ public class SitClient implements ClientModInitializer
 		//VERSION_CHECK request received from server, send back own version
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 
-		buf.writeInt(Sit.PROTOCOL_VERSION);
+		buf.writeInt(Sit.getModVersion());
 		return CompletableFuture.completedFuture(buf);
 	}
 

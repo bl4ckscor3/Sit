@@ -3,6 +3,13 @@ package bl4ckscor3.mod.sit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.impl.FabricLoaderImpl;
+import net.fabricmc.loader.impl.launch.FabricLauncher;
+import net.fabricmc.loader.impl.launch.FabricLauncherBase;
+import net.minecraft.Bootstrap;
+import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
@@ -22,11 +29,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Optional;
+
 public class Sit implements ModInitializer
 {
-	public static final int PROTOCOL_VERSION = 12;
 	public static final Identifier VERSION_CHECK = new Identifier("sit", "version_check");
-	public static final Text INCORRECT_VERSION = new LiteralText(String.format("Please install Sit 1.17-%d to play on this server.", PROTOCOL_VERSION));
+	public static final Text INCORRECT_VERSION = new LiteralText(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("sit", "entity_sit"),
@@ -72,5 +80,32 @@ public class Sit implements ModInitializer
 
 			return ActionResult.PASS;
 		});
+	}
+
+	private static String getMajorMinecraftVersion()
+	{
+		String version = SharedConstants.VERSION_NAME;
+		String[] versionSplit = version.split("\\.");
+
+		if(versionSplit.length > 2)
+			return versionSplit[0] + "." + versionSplit[1];
+		else
+			return version;
+	}
+
+	public static int getModVersion()
+	{
+		Optional<ModContainer> modContainer = FabricLoaderImpl.INSTANCE.getModContainer("sit");
+
+		if(modContainer.isPresent())
+		{
+			try
+			{
+				return Integer.parseInt(modContainer.get().getMetadata().getVersion().getFriendlyString().split("-")[1]); //Sit's format is mcversion-modversion
+			}
+			catch(NumberFormatException e) {}
+		}
+
+		return 0;
 	}
 }
