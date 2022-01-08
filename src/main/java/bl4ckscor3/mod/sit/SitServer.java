@@ -5,16 +5,24 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
-
 
 public class SitServer implements DedicatedServerModInitializer
 {
 	@Override
 	public void onInitializeServer()
 	{
+		if(FabricLoader.getInstance().isModLoaded("cloth-config"))
+		{
+			ConfigHandler.register();
+
+			if(ConfigHandler.versionCheckDisabled())
+				return;
+		}
+
 		//version check
 		ServerLoginNetworking.registerGlobalReceiver(Sit.VERSION_CHECK, this::onClientResponse);
 		ServerLoginConnectionEvents.QUERY_START.register(this::onLoginStart);
