@@ -1,49 +1,49 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 
 public class SitEntity extends Entity
 {
-	public static final HashMap<Vec3d,BlockPos> OCCUPIED = new HashMap<>();
+	public static final HashMap<Vec3,BlockPos> OCCUPIED = new HashMap<>();
 
-	public SitEntity(EntityType<? extends SitEntity> type, World world)
+	public SitEntity(EntityType<? extends SitEntity> type, Level world)
 	{
 		super(type, world);
 	}
 
-	public SitEntity(World world)
+	public SitEntity(Level world)
 	{
 		super(Sit.SIT_ENTITY_TYPE, world);
-		noClip = true;
+		noPhysics = true;
 	}
 
 	@Override
-	public Vec3d updatePassengerForDismount(LivingEntity passenger)
+	public Vec3 getDismountLocationForPassenger(LivingEntity passenger)
 	{
-		if(passenger instanceof PlayerEntity)
+		if(passenger instanceof Player)
 		{
-			BlockPos pos = OCCUPIED.remove(getPos());
+			BlockPos pos = OCCUPIED.remove(position());
 
 			if(pos != null)
 			{
 				remove(RemovalReason.DISCARDED);
-				return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+				return new Vec3(pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 
 		remove(RemovalReason.DISCARDED);
-		return super.updatePassengerForDismount(passenger);
+		return super.getDismountLocationForPassenger(passenger);
 	}
 
 	@Override
@@ -51,21 +51,21 @@ public class SitEntity extends Entity
 	{
 		super.remove(reason);
 
-		OCCUPIED.remove(getPos());
+		OCCUPIED.remove(position());
 	}
 
 	@Override
-	protected void initDataTracker() {}
+	protected void defineSynchedData() {}
 
 	@Override
-	public void readCustomDataFromNbt(NbtCompound nbt) {}
+	public void readAdditionalSaveData(CompoundTag nbt) {}
 
 	@Override
-	public void writeCustomDataToNbt(NbtCompound nbt) {}
+	public void addAdditionalSaveData(CompoundTag nbt) {}
 
 	@Override
-	public Packet<?> createSpawnPacket()
+	public Packet<?> getAddEntityPacket()
 	{
-		return new EntitySpawnS2CPacket(this);
+		return new ClientboundAddEntityPacket(this);
 	}
 }
