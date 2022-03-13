@@ -15,8 +15,6 @@ import java.util.HashMap;
 
 public class SitEntity extends Entity
 {
-	public static final HashMap<Vec3,BlockPos> OCCUPIED = new HashMap<>();
-
 	public SitEntity(EntityType<? extends SitEntity> type, Level world)
 	{
 		super(type, world);
@@ -31,18 +29,18 @@ public class SitEntity extends Entity
 	@Override
 	public Vec3 getDismountLocationForPassenger(LivingEntity passenger)
 	{
-		if(passenger instanceof Player)
+		if(passenger instanceof Player player)
 		{
-			BlockPos pos = OCCUPIED.remove(position());
+			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
 
 			if(pos != null)
 			{
-				remove(RemovalReason.DISCARDED);
-				return new Vec3(pos.getX(), pos.getY(), pos.getZ());
+				discard();
+				return new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			}
 		}
 
-		remove(RemovalReason.DISCARDED);
+		discard();
 		return super.getDismountLocationForPassenger(passenger);
 	}
 
@@ -51,7 +49,7 @@ public class SitEntity extends Entity
 	{
 		super.remove(reason);
 
-		OCCUPIED.remove(position());
+		SitUtil.removeSitEntity(level, blockPosition());
 	}
 
 	@Override
