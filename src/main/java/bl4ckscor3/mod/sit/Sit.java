@@ -82,6 +82,18 @@ public class Sit implements ModInitializer
 
 			return InteractionResult.PASS;
 		});
+		PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) -> {
+			if(!level.isClientSide)
+			{
+				SitEntity entity = SitUtil.getSitEntity(level, pos);
+
+				if(entity != null)
+				{
+					SitUtil.removeSitEntity(level, pos);
+					entity.ejectPassengers();
+				}
+			}
+		});
 	}
 
 	private static String getMajorMinecraftVersion()
