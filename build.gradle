@@ -51,6 +51,8 @@ dependencies {
 }
 
 processResources {
+	duplicatesStrategy = 'include'
+
 	//replace ${version} in mods.toml
 	inputs.property 'version', project.version
 
