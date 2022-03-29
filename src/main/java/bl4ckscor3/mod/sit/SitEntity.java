@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -30,12 +31,20 @@ public class SitEntity extends Entity
 	{
 		if(passenger instanceof PlayerEntity)
 		{
-			BlockPos pos = SitUtil.getPreviousPlayerPosition((PlayerEntity)passenger, this);
+			PlayerEntity player = (PlayerEntity)passenger;
+			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
 
 			if(pos != null)
 			{
+				Vector3d resetPosition = new Vector3d(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+				BlockPos belowResetPos = new BlockPos(resetPosition.x, resetPosition.y - 1, resetPosition.z);
+
 				remove();
-				return new Vector3d(pos.getX(), pos.getY(), pos.getZ());
+
+				if(!player.world.getBlockState(belowResetPos).isTopSolid(world, belowResetPos, player, Direction.UP))
+					return new Vector3d(resetPosition.x, resetPosition.y + 1, resetPosition.z);
+				else
+					return resetPosition;
 			}
 		}
 
