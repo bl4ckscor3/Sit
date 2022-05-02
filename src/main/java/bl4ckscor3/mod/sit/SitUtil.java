@@ -1,14 +1,13 @@
 package bl4ckscor3.mod.sit;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Use this class to manage sit entities correctly

@@ -11,8 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-
 public class SitEntity extends Entity
 {
 	public SitEntity(EntityType<? extends SitEntity> type, Level world)

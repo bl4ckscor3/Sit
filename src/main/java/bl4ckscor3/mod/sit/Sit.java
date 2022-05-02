@@ -4,8 +4,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
@@ -109,7 +108,7 @@ public class Sit implements ModInitializer
 
 	public static int getModVersion()
 	{
-		Optional<ModContainer> modContainer = FabricLoaderImpl.INSTANCE.getModContainer("sit");
+		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("sit");
 
 		if(modContainer.isPresent())
 		{
