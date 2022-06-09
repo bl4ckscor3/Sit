@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
@@ -29,7 +28,7 @@ import java.util.Optional;
 public class Sit implements ModInitializer
 {
 	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
-	public static final Component INCORRECT_VERSION = new TextComponent(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
+	public static final Component INCORRECT_VERSION = Component.literal(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new ResourceLocation("sit", "entity_sit"),

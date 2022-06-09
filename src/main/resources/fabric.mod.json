@@ -10,7 +10,7 @@
   "contact": {
     "homepage": "https://curseforge.com/minecraft/mc-mods/sit-fabric",
     "issues": "https://github.com/bl4ckscor3/Sit/issues",
-    "sources": "https://github.com/bl4ckscor3/Sit/tree/1.18-fabric"
+    "sources": "https://github.com/bl4ckscor3/Sit/tree/1.19-fabric"
   },
   "license": "GPL-3.0",
   "icon": "assets/sit/icon.png",
@@ -29,7 +29,7 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": ">=0.28.0",
-    "minecraft": "1.18.x",
+    "minecraft": "~1.19",
     "java": ">=17"
   },
   "suggests": {
