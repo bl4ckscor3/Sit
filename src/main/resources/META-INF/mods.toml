@@ -1,12 +1,12 @@
-modLoader="javafml" #mandatory
-loaderVersion="[38,)" #mandatory
-license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.18/LICENSE"
+modLoader="javafml"
+loaderVersion="[41,)"
+license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.19/LICENSE"
 
-[[mods]] #mandatory
-	modId="sit" #mandatory
-	version="${file.jarVersion}" #mandatory
-	displayName="Sit" #mandatory
-	description='''Allows you to sit on slabs and stairs.''' #mandatory
+[[mods]]
+	modId="sit"
+	version="${file.jarVersion}"
+	displayName="Sit"
+	description='''Allows you to sit on slabs and stairs.'''
 	issueTrackerURL="http://github.com/bl4ckscor3/Sit/issues"
 	displayURL="https://curseforge.com/minecraft/mc-mods/sit"
 	authors="bl4ckscor3"
@@ -14,13 +14,13 @@ license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.18/LICENSE"
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[38,)"
+    versionRange="[41,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.sit]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"

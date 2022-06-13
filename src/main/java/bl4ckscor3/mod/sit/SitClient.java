@@ -17,7 +17,7 @@ public class SitClient
 	@SubscribeEvent
 	public static void onFMLCLientSetup(FMLClientSetupEvent event)
 	{
-		EntityRenderers.register(Sit.SIT_ENTITY_TYPE, EmptyRenderer::new);
+		EntityRenderers.register(Sit.SIT_ENTITY_TYPE.get(), EmptyRenderer::new);
 	}
 
 	private static class EmptyRenderer extends EntityRenderer<SitEntity>
