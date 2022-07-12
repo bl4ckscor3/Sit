@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -24,11 +24,11 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event)
 	{
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 
-		if(!event.getWorld().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown())
+		if(!event.getLevel().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown())
 		{
-			Level world = event.getWorld();
+			Level world = event.getLevel();
 			BlockPos pos = event.getPos();
 			BlockState state = world.getBlockState(pos);
 			Block block = world.getBlockState(pos).getBlock();
@@ -54,14 +54,14 @@ public class SitHandler
 	@SubscribeEvent
 	public static void onBreak(BreakEvent event)
 	{
-		if(!event.getWorld().isClientSide())
+		if(!event.getLevel().isClientSide())
 		{
 			//BreakEvent gets a World in its constructor, so the cast is safe
-			SitEntity entity = SitUtil.getSitEntity((Level)event.getWorld(), event.getPos());
+			SitEntity entity = SitUtil.getSitEntity((Level)event.getLevel(), event.getPos());
 
 			if(entity != null)
 			{
-				SitUtil.removeSitEntity((Level)event.getWorld(), event.getPos());
+				SitUtil.removeSitEntity((Level)event.getLevel(), event.getPos());
 				entity.ejectPassengers();
 			}
 		}
