@@ -10,6 +10,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -29,7 +31,7 @@ public class Sit implements ModInitializer {
 	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
 	public static final Component INCORRECT_VERSION = Component.literal(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
-			Registry.ENTITY_TYPE,
+			BuiltInRegistries.ENTITY_TYPE,
 			new ResourceLocation("sit", "entity_sit"),
 			FabricEntityTypeBuilder.<SitEntity>create(MobCategory.MISC, SitEntity::new).dimensions(EntityDimensions.fixed(0.001F, 0.001F)).build()
 	);
