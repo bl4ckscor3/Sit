@@ -25,8 +25,7 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 
 import java.util.Optional;
 
-public class Sit implements ModInitializer
-{
+public class Sit implements ModInitializer {
 	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
 	public static final Component INCORRECT_VERSION = Component.literal(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
@@ -36,42 +35,39 @@ public class Sit implements ModInitializer
 	);
 
 	@Override
-	public void onInitialize()
-	{
+	public void onInitialize() {
 		//sit handling
 		UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
-			if(level.isClientSide)
+			if (level.isClientSide)
 				return InteractionResult.PASS;
 
-			if(!level.mayInteract(player, hitResult.getBlockPos()))
+			if (!level.mayInteract(player, hitResult.getBlockPos()))
 				return InteractionResult.PASS;
 
-			if(player.isShiftKeyDown())
+			if (player.isShiftKeyDown())
 				return InteractionResult.PASS;
 
-			if(SitUtil.isPlayerSitting(player))
+			if (SitUtil.isPlayerSitting(player))
 				return InteractionResult.PASS;
 
-			if(hitResult.getDirection() != Direction.UP)
+			if (hitResult.getDirection() != Direction.UP)
 				return InteractionResult.PASS;
 
 			BlockPos hitPos = hitResult.getBlockPos();
 			BlockState s = level.getBlockState(hitPos);
 			Block b = s.getBlock();
 
-			if((b instanceof SlabBlock || b instanceof StairBlock) && !SitUtil.isOccupied(level, hitPos) && player.getItemInHand(hand).isEmpty())
-			{
-				if(b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.TYPE) || s.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
+			if ((b instanceof SlabBlock || b instanceof StairBlock) && !SitUtil.isOccupied(level, hitPos) && player.getItemInHand(hand).isEmpty()) {
+				if (b instanceof SlabBlock && (!s.getProperties().contains(SlabBlock.TYPE) || s.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return InteractionResult.PASS;
-				else if(b instanceof StairBlock && (!s.getProperties().contains(StairBlock.HALF) || s.getValue(StairBlock.HALF) != Half.BOTTOM))
+				else if (b instanceof StairBlock && (!s.getProperties().contains(StairBlock.HALF) || s.getValue(StairBlock.HALF) != Half.BOTTOM))
 					return InteractionResult.PASS;
 
 				SitEntity sit = SIT_ENTITY_TYPE.create(level);
 
 				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.25D, hitPos.getZ() + 0.5D);
 
-				if(SitUtil.addSitEntity(level, hitPos, sit, player.blockPosition()))
-				{
+				if (SitUtil.addSitEntity(level, hitPos, sit, player.blockPosition())) {
 					level.addFreshEntity(sit);
 					player.startRiding(sit);
 					return InteractionResult.SUCCESS;
@@ -81,12 +77,10 @@ public class Sit implements ModInitializer
 			return InteractionResult.PASS;
 		});
 		PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) -> {
-			if(!level.isClientSide)
-			{
+			if (!level.isClientSide) {
 				SitEntity entity = SitUtil.getSitEntity(level, pos);
 
-				if(entity != null)
-				{
+				if (entity != null) {
 					SitUtil.removeSitEntity(level, pos);
 					entity.ejectPassengers();
 				}
@@ -94,28 +88,24 @@ public class Sit implements ModInitializer
 		});
 	}
 
-	private static String getMajorMinecraftVersion()
-	{
+	private static String getMajorMinecraftVersion() {
 		String version = SharedConstants.VERSION_STRING;
 		String[] versionSplit = version.split("\\.");
 
-		if(versionSplit.length > 2)
+		if (versionSplit.length > 2)
 			return versionSplit[0] + "." + versionSplit[1];
 		else
 			return version;
 	}
 
-	public static int getModVersion()
-	{
+	public static int getModVersion() {
 		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("sit");
 
-		if(modContainer.isPresent())
-		{
-			try
-			{
+		if (modContainer.isPresent()) {
+			try {
 				return Integer.parseInt(modContainer.get().getMetadata().getVersion().getFriendlyString().split("-")[1]); //Sit's format is mcversion-modversion
 			}
-			catch(NumberFormatException e) {}
+			catch (NumberFormatException e) {}
 		}
 
 		return 0;

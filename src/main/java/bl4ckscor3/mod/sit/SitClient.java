@@ -17,17 +17,14 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class SitClient implements ClientModInitializer
-{
+public class SitClient implements ClientModInitializer {
 	@Override
-	public void onInitializeClient()
-	{
+	public void onInitializeClient() {
 		EntityRendererRegistry.register(Sit.SIT_ENTITY_TYPE, EmptyRenderer::new);
 		ClientLoginNetworking.registerGlobalReceiver(Sit.VERSION_CHECK, this::onServerRequest);
 	}
 
-	private CompletableFuture<FriendlyByteBuf> onServerRequest(Minecraft minecraft, ClientHandshakePacketListenerImpl listener, FriendlyByteBuf inBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> consumer)
-	{
+	private CompletableFuture<FriendlyByteBuf> onServerRequest(Minecraft minecraft, ClientHandshakePacketListenerImpl listener, FriendlyByteBuf inBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> consumer)  {
 		//VERSION_CHECK request received from server, send back own version
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
@@ -35,22 +32,18 @@ public class SitClient implements ClientModInitializer
 		return CompletableFuture.completedFuture(buf);
 	}
 
-	private static class EmptyRenderer extends EntityRenderer<SitEntity>
-	{
-		protected EmptyRenderer(EntityRendererProvider.Context ctx)
-		{
+	private static class EmptyRenderer extends EntityRenderer<SitEntity> {
+		protected EmptyRenderer(EntityRendererProvider.Context ctx) {
 			super(ctx);
 		}
 
 		@Override
-		public boolean shouldRender(SitEntity entity, Frustum frustum, double d, double e, double f)
-		{
+		public boolean shouldRender(SitEntity entity, Frustum frustum, double d, double e, double f) {
 			return false;
 		}
 
 		@Override
-		public ResourceLocation getTextureLocation(SitEntity entity)
-		{
+		public ResourceLocation getTextureLocation(SitEntity entity) {
 			return null;
 		}
 	}

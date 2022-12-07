@@ -11,28 +11,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class SitEntity extends Entity
-{
-	public SitEntity(EntityType<? extends SitEntity> type, Level world)
-	{
-		super(type, world);
+public class SitEntity extends Entity {
+	public SitEntity(EntityType<? extends SitEntity> type, Level level) {
+		super(type, level);
 	}
 
-	public SitEntity(Level world)
-	{
-		super(Sit.SIT_ENTITY_TYPE, world);
+	public SitEntity(Level level) {
+		super(Sit.SIT_ENTITY_TYPE, level);
 		noPhysics = true;
 	}
 
 	@Override
-	public Vec3 getDismountLocationForPassenger(LivingEntity passenger)
-	{
-		if(passenger instanceof Player player)
-		{
+	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+		if (passenger instanceof Player player) {
 			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
 
-			if(pos != null)
-			{
+			if (pos != null) {
 				discard();
 				return new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			}
@@ -43,10 +37,8 @@ public class SitEntity extends Entity
 	}
 
 	@Override
-	public void remove(RemovalReason reason)
-	{
+	public void remove(RemovalReason reason) {
 		super.remove(reason);
-
 		SitUtil.removeSitEntity(level, blockPosition());
 	}
 
@@ -60,8 +52,7 @@ public class SitEntity extends Entity
 	public void addAdditionalSaveData(CompoundTag nbt) {}
 
 	@Override
-	public Packet<?> getAddEntityPacket()
-	{
+	public Packet<?> getAddEntityPacket() {
 		return new ClientboundAddEntityPacket(this);
 	}
 }
