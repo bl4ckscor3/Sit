@@ -1,6 +1,6 @@
 modLoader="javafml"
-loaderVersion="[41,)"
-license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.19/LICENSE"
+loaderVersion="[44,)"
+license="MIT https://github.com/bl4ckscor3/Sit/blob/1.19/LICENSE"
 
 [[mods]]
 	modId="sit"
@@ -14,13 +14,13 @@ license="GNU GPL v3.0 https://github.com/bl4ckscor3/Sit/blob/1.19/LICENSE"
 [[dependencies.sit]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0.94,)"
+    versionRange="[44,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.sit]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"
