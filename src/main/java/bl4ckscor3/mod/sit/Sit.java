@@ -13,19 +13,19 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 @Mod(Sit.MODID)
-@EventBusSubscriber(bus=Bus.MOD)
-public class Sit
-{
+@EventBusSubscriber(bus = Bus.MOD)
+public class Sit {
 	public static final String MODID = "sit";
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
 	public static final RegistryObject<EntityType<SitEntity>> SIT_ENTITY_TYPE = ENTITY_TYPES.register("entity_sit", () -> EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC)
+	//@formatter:off
 			.setTrackingRange(256)
 			.setUpdateInterval(20)
 			.sized(0.0001F, 0.0001F)
 			.build(MODID + ":entity_sit"));
+	//@formatter:on
 
-	public Sit()
-	{
+	public Sit() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Configuration.CONFIG_SPEC);
 		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

@@ -11,31 +11,25 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@EventBusSubscriber(bus=Bus.MOD, value=Dist.CLIENT)
-public class SitClient
-{
+@EventBusSubscriber(bus = Bus.MOD, value = Dist.CLIENT)
+public class SitClient {
 	@SubscribeEvent
-	public static void onFMLCLientSetup(FMLClientSetupEvent event)
-	{
+	public static void onFMLCLientSetup(FMLClientSetupEvent event) {
 		EntityRenderers.register(Sit.SIT_ENTITY_TYPE.get(), EmptyRenderer::new);
 	}
 
-	private static class EmptyRenderer extends EntityRenderer<SitEntity>
-	{
-		protected EmptyRenderer(EntityRendererProvider.Context ctx)
-		{
+	private static class EmptyRenderer extends EntityRenderer<SitEntity> {
+		protected EmptyRenderer(EntityRendererProvider.Context ctx) {
 			super(ctx);
 		}
 
 		@Override
-		public boolean shouldRender(SitEntity entity, Frustum camera, double camX, double camY, double camZ)
-		{
+		public boolean shouldRender(SitEntity entity, Frustum camera, double camX, double camY, double camZ) {
 			return false;
 		}
 
 		@Override
-		public ResourceLocation getTextureLocation(SitEntity entity)
-		{
+		public ResourceLocation getTextureLocation(SitEntity entity) {
 			return null;
 		}
 	}
