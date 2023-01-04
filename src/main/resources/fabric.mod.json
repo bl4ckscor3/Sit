@@ -24,13 +24,17 @@
     ],
     "client": [
       "bl4ckscor3.mod.sit.SitClient"
+    ],
+    "modmenu": [
+      "bl4ckscor3.mod.sit.ModMenuIntegration"
     ]
   },
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": ">=0.28.0",
     "minecraft": "~1.19",
-    "java": ">=17"
+    "java": ">=17",
+    "cloth-config": ">=9.0.92"
   },
   "suggests": {
     "flamingo": "*"
