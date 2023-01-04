@@ -12,7 +12,7 @@
     "issues": "https://github.com/bl4ckscor3/Sit/issues",
     "sources": "https://github.com/bl4ckscor3/Sit/tree/1.19-fabric"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "icon": "assets/sit/icon.png",
   "environment": "*",
   "entrypoints": {
