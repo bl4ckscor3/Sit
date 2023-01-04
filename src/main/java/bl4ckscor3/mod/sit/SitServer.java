@@ -1,11 +1,11 @@
 package bl4ckscor3.mod.sit;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -13,12 +13,8 @@ import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 public class SitServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
-		if (FabricLoader.getInstance().isModLoaded("cloth-config")) 	{
-			ConfigHandler.register();
-
-			if (ConfigHandler.versionCheckDisabled())
-				return;
-		}
+		if (AutoConfig.getConfigHolder(SitConfig.class).getConfig().disableVersionChecker)
+			return;
 
 		//version check
 		ServerLoginNetworking.registerGlobalReceiver(Sit.VERSION_CHECK, this::onClientResponse);
