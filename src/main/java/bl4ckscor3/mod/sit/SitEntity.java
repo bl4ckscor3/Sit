@@ -19,7 +19,7 @@ public class SitEntity extends Entity {
 	}
 
 	public SitEntity(Level level, BlockPos pos) {
-		super(Sit.SIT_ENTITY_TYPE, level);
+		super(Sit.SIT_ENTITY_TYPE.get(), level);
 		setPos(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
 		noPhysics = true;
 	}
