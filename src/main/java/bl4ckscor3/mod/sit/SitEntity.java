@@ -13,35 +13,29 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.phys.Vec3;
 
-public class SitEntity extends Entity
-{
-	public SitEntity(EntityType<SitEntity> type, Level world)
-	{
-		super(type, world);
+public class SitEntity extends Entity {
+	public SitEntity(EntityType<SitEntity> type, Level level) {
+		super(type, level);
 	}
 
-	public SitEntity(Level world, BlockPos pos)
-	{
-		super(Sit.SIT_ENTITY_TYPE, world);
+	public SitEntity(Level level, BlockPos pos) {
+		super(Sit.SIT_ENTITY_TYPE, level);
 		setPos(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
 		noPhysics = true;
 	}
 
 	@Override
-	public Vec3 getDismountLocationForPassenger(LivingEntity passenger)
-	{
-		if(passenger instanceof Player player)
-		{
+	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+		if (passenger instanceof Player player) {
 			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
 
-			if(pos != null)
-			{
+			if (pos != null) {
 				Vec3 resetPosition = new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 				BlockPos belowResetPos = new BlockPos(resetPosition.x, resetPosition.y - 1, resetPosition.z);
 
 				discard();
 
-				if(!player.level.getBlockState(belowResetPos).isFaceSturdy(level, belowResetPos, Direction.UP, SupportType.FULL))
+				if (!player.level.getBlockState(belowResetPos).isFaceSturdy(level, belowResetPos, Direction.UP, SupportType.FULL))
 					return new Vec3(resetPosition.x, resetPosition.y + 1, resetPosition.z);
 				else
 					return resetPosition;
@@ -53,8 +47,7 @@ public class SitEntity extends Entity
 	}
 
 	@Override
-	public void remove(RemovalReason reason)
-	{
+	public void remove(RemovalReason reason) {
 		super.remove(reason);
 
 		SitUtil.removeSitEntity(level, blockPosition());
@@ -70,8 +63,7 @@ public class SitEntity extends Entity
 	protected void addAdditionalSaveData(CompoundTag tag) {}
 
 	@Override
-	public Packet<?> getAddEntityPacket()
-	{
+	public Packet<?> getAddEntityPacket() {
 		return new ClientboundAddEntityPacket(this);
 	}
 }
