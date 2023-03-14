@@ -1,5 +1,8 @@
 package bl4ckscor3.mod.sit;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -13,9 +16,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class SitClient implements ClientModInitializer {
 	@Override

@@ -1,5 +1,9 @@
 package bl4ckscor3.mod.sit;
 
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -28,16 +32,16 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 
-import java.util.Optional;
-
 public class Sit implements ModInitializer {
 	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
 	public static final Component INCORRECT_VERSION = Component.literal(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
+	//@formatter:off
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
 			new ResourceLocation("sit", "entity_sit"),
 			FabricEntityTypeBuilder.<SitEntity>create(MobCategory.MISC, SitEntity::new).dimensions(EntityDimensions.fixed(0.001F, 0.001F)).build()
 	);
+	//@formatter:on
 
 	@Override
 	public void onInitialize() {
@@ -108,11 +112,8 @@ public class Sit implements ModInitializer {
 		if (blockReachDistance == 0) //player has to stand on top of the block
 			return playerPos.getY() - pos.getY() <= 1 && playerPos.getX() - pos.getX() == 0 && playerPos.getZ() - pos.getZ() == 0;
 
-		pos = pos.offset(0.5D, 0.5D, 0.5D);
-
 		AABB range = new AABB(pos.getX() + blockReachDistance, pos.getY() + blockReachDistance, pos.getZ() + blockReachDistance, pos.getX() - blockReachDistance, pos.getY() - blockReachDistance, pos.getZ() - blockReachDistance);
 
-		playerPos = playerPos.offset(0.5D, 0.5D, 0.5D);
 		return range.minX <= playerPos.getX() && range.minY <= playerPos.getY() && range.minZ <= playerPos.getZ() && range.maxX >= playerPos.getX() && range.maxY >= playerPos.getY() && range.maxZ >= playerPos.getZ();
 	}
 
@@ -133,7 +134,9 @@ public class Sit implements ModInitializer {
 			try {
 				return Integer.parseInt(modContainer.get().getMetadata().getVersion().getFriendlyString().split("-")[1]); //Sit's format is mcversion-modversion
 			}
-			catch (NumberFormatException e) {}
+			catch (Exception e) {
+				LogManager.getLogger().error("Couldn't find proper Sit version. Version is: " + modContainer.get().getMetadata().getVersion().getFriendlyString());
+			}
 		}
 
 		return 0;
