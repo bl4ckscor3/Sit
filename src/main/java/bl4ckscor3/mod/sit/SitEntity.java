@@ -32,7 +32,7 @@ public class SitEntity extends Entity {
 
 			if (pos != null) {
 				Vec3 resetPosition = new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-				BlockPos belowResetPos = new BlockPos(resetPosition.x, resetPosition.y - 1, resetPosition.z);
+				BlockPos belowResetPos = BlockPos.containing(resetPosition.x, resetPosition.y - 1, resetPosition.z);
 
 				discard();
 
