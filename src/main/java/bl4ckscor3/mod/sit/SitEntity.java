@@ -40,7 +40,7 @@ public class SitEntity extends Entity {
 	@Override
 	public void remove(RemovalReason reason) {
 		super.remove(reason);
-		SitUtil.removeSitEntity(level, blockPosition());
+		SitUtil.removeSitEntity(level(), blockPosition());
 	}
 
 	@Override
