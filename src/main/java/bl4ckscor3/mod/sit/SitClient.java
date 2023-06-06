@@ -24,7 +24,7 @@ public class SitClient implements ClientModInitializer {
 		ClientLoginNetworking.registerGlobalReceiver(Sit.VERSION_CHECK, this::onServerRequest);
 	}
 
-	private CompletableFuture<FriendlyByteBuf> onServerRequest(Minecraft minecraft, ClientHandshakePacketListenerImpl listener, FriendlyByteBuf inBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> consumer)  {
+	private CompletableFuture<FriendlyByteBuf> onServerRequest(Minecraft minecraft, ClientHandshakePacketListenerImpl listener, FriendlyByteBuf inBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> consumer) {
 		//VERSION_CHECK request received from server, send back own version
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
