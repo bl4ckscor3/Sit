@@ -90,8 +90,8 @@ public class SitUtil {
 	 *         client.
 	 */
 	public static BlockPos getPreviousPlayerPosition(Player player, SitEntity sitEntity) {
-		if (!player.level.isClientSide) {
-			ResourceLocation id = getDimensionTypeId(player.level);
+		if (!player.level().isClientSide) {
+			ResourceLocation id = getDimensionTypeId(player.level());
 
 			if (OCCUPIED.containsKey(id)) {
 				for (Pair<SitEntity, BlockPos> pair : OCCUPIED.get(id).values()) {
