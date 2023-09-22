@@ -14,6 +14,8 @@ import net.minecraft.world.level.Level;
  * Use this class to manage sit entities correctly
  */
 public class SitUtil {
+	private SitUtil() {}
+
 	/**
 	 * <dimension type id, <position, <entity, previous player position>>> This map only gets populated server side.
 	 */
@@ -33,9 +35,7 @@ public class SitUtil {
 		if (!level.isClientSide) {
 			ResourceLocation id = getDimensionTypeId(level);
 
-			if (!OCCUPIED.containsKey(id))
-				OCCUPIED.put(id, new HashMap<>());
-
+			OCCUPIED.computeIfAbsent(id, unused -> new HashMap<>());
 			OCCUPIED.get(id).put(blockPos, Pair.of(entity, playerPos));
 			return true;
 		}
@@ -125,8 +125,8 @@ public class SitUtil {
 	 * @return true if the given player is sitting anywhere, false otherwise
 	 */
 	public static boolean isPlayerSitting(Player player) {
-		for (ResourceLocation i : OCCUPIED.keySet()) {
-			for (Pair<SitEntity, BlockPos> pair : OCCUPIED.get(i).values()) {
+		for (var entry : OCCUPIED.entrySet()) {
+			for (Pair<SitEntity, BlockPos> pair : entry.getValue().values()) {
 				if (pair.getLeft().hasPassenger(player))
 					return true;
 			}

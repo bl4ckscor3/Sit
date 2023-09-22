@@ -48,19 +48,7 @@ public class Sit implements ModInitializer {
 		AutoConfig.register(SitConfig.class, JanksonConfigSerializer::new);
 		//sit handling
 		UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
-			if (level.isClientSide)
-				return InteractionResult.PASS;
-
-			if (!level.mayInteract(player, hitResult.getBlockPos()))
-				return InteractionResult.PASS;
-
-			if (player.isShiftKeyDown())
-				return InteractionResult.PASS;
-
-			if (SitUtil.isPlayerSitting(player))
-				return InteractionResult.PASS;
-
-			if (hitResult.getDirection() != Direction.UP)
+			if (level.isClientSide || !level.mayInteract(player, hitResult.getBlockPos()) || player.isShiftKeyDown() || SitUtil.isPlayerSitting(player) || hitResult.getDirection() != Direction.UP)
 				return InteractionResult.PASS;
 
 			BlockPos hitPos = hitResult.getBlockPos();
@@ -75,7 +63,7 @@ public class Sit implements ModInitializer {
 
 				SitEntity sit = SIT_ENTITY_TYPE.create(level);
 
-				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.25D, hitPos.getZ() + 0.5D);
+				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.5D, hitPos.getZ() + 0.5D);
 
 				if (SitUtil.addSitEntity(level, hitPos, sit, player.blockPosition())) {
 					level.addFreshEntity(sit);
@@ -135,7 +123,7 @@ public class Sit implements ModInitializer {
 				return Integer.parseInt(modContainer.get().getMetadata().getVersion().getFriendlyString().split("-")[1]); //Sit's format is mcversion-modversion
 			}
 			catch (Exception e) {
-				LogManager.getLogger().error("Couldn't find proper Sit version. Version is: " + modContainer.get().getMetadata().getVersion().getFriendlyString());
+				LogManager.getLogger().error("Couldn't find proper Sit version. Version is: {}", modContainer.get().getMetadata().getVersion().getFriendlyString());
 			}
 		}
 

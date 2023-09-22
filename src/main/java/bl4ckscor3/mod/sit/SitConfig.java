@@ -11,7 +11,7 @@ public class SitConfig implements ConfigData {
 	boolean disableVersionChecker = false;
 	//@formatter:off
 	@Comment("""
-   			The maximum distance in blocks that the player can be away from a block to still be able to sit on it.
+			The maximum distance in blocks that the player can be away from a block to still be able to sit on it.
 			Do note, that this is limited by how far a player can access a block in vanilla Minecraft.
 			If this is set to 0, the player has to stand on top of the block to be able to sit on it.""")
 	//@formatter:on
