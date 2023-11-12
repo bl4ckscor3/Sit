@@ -85,7 +85,7 @@ public class SitUtil {
 	 * Gets the position the player was at before he sat down
 	 *
 	 * @param player The player
-	 * @param sitEntityThe sit entity the player is sitting on
+	 * @param sitEntity The sit entity the player is sitting on
 	 * @return The position the player was at before he sat down, null if the player is not sitting. This is always null on the
 	 *         client.
 	 */

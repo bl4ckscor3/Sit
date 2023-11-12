@@ -1,62 +1,39 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
-        mavenCentral()
-    }
-
-    dependencies {
-		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.gradle.userdev' version '[7.0,7.1)'
+//	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
-
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 
 version = '1.3.3'
 group = 'bl4ckscor3.mod.sit'
 
 base {
-	archivesName = 'sit-1.20'
+	archivesName = 'sit-1.20.2'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
-minecraft {
-	mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.20'
-	copyIdeResources = true
-	
-    runs {
-        client {
-		    workingDirectory project.file('run/client')
-            property 'forge.logging.console.level', 'debug'
+runs {
+    configureEach {
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
+    }
 
-            mods {
-                sit {
-                    source sourceSets.main
-                }
-            }
-        }
+    client {
+        workingDirectory project.file('run/client')
+    }
 
-        server {
-		    workingDirectory project.file('run/server')
-            property 'forge.logging.console.level', 'debug'
-            args '-nogui'
-
-            mods {
-                sit {
-                    source sourceSets.main
-                }
-            }
-        }
+    server {
+        workingDirectory project.file('run/server')
+        programArgument '-nogui'
     }
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.20-46.0.12'
+    implementation 'net.neoforged:neoforge:20.2.47-beta'
 }
 
 tasks.named('jar', Jar).configure {
