@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[1,)"
-license="MIT https://github.com/bl4ckscor3/Sit/blob/1.20.2/LICENSE"
+license="MIT https://github.com/bl4ckscor3/Sit/blob/neoforge/1.20.2/LICENSE"
 
 [[mods]]
 	modId="sit"
@@ -14,7 +14,7 @@ license="MIT https://github.com/bl4ckscor3/Sit/blob/1.20.2/LICENSE"
 [[dependencies.sit]]
     modId="neoforge"
     mandatory=true
-    versionRange="[20.2,)"
+    versionRange="[20.2.59-beta,)"
     ordering="NONE"
     side="BOTH"
 
