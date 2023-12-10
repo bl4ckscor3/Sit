@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,40 +21,38 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(modid = Sit.MODID)
 public class SitHandler {
+	private SitHandler() {}
+
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
+		Level level = player.level;
 
-		if (!event.getLevel().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
-			Level world = event.getLevel();
+		if (!level.isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
 			BlockPos pos = event.getPos();
-			BlockState state = world.getBlockState(pos);
-			Block block = world.getBlockState(pos).getBlock();
+			BlockState state = level.getBlockState(pos);
+			Block block = state.getBlock();
 
-			if (isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getMainHandItem().isEmpty() && world.getBlockState(pos.above()).isAir()) {
-				if (block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
+			if (isValidBlock(level, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(level, pos) && player.getMainHandItem().isEmpty() && level.getBlockState(pos.above()).isAir()) {
+				if ((!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM) && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM)) {
 					return;
-				else if (block instanceof StairBlock && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM))
-					return;
-
-				SitEntity sit = new SitEntity(world, pos);
-
-				if (SitUtil.addSitEntity(world, pos, sit, player.blockPosition())) {
-					world.addFreshEntity(sit);
-					player.startRiding(sit);
-				}
+				else
+					SitUtil.sitDown(player, level, pos, 0.25F);
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public static void onBreak(BreakEvent event) {
-		if (!event.getLevel().isClientSide()) {
-			//BreakEvent gets a World in its constructor, so the cast is safe
-			SitEntity entity = SitUtil.getSitEntity((Level) event.getLevel(), event.getPos());
+		//BreakEvent gets a Level in its constructor, so the cast is safe
+		Level level = (Level) event.getLevel();
+
+		if (!level.isClientSide()) {
+			BlockPos pos = event.getPos();
+			SitEntity entity = SitUtil.getSitEntity(level, pos);
 
 			if (entity != null) {
-				SitUtil.removeSitEntity((Level) event.getLevel(), event.getPos());
+				SitUtil.removeSitEntity(level, pos);
 				entity.ejectPassengers();
 			}
 		}
@@ -69,31 +68,16 @@ public class SitHandler {
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
 	private static boolean isValidBlock(Level world, BlockPos pos, BlockState state, Block block) {
-		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock || isModBlock(block);
+		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock;
 
 		if (!isValid && block instanceof BedBlock) {
-			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(BedBlock.FACING).getOpposite() : state.getValue(BedBlock.FACING)));
+			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(HorizontalDirectionalBlock.FACING).getOpposite() : state.getValue(HorizontalDirectionalBlock.FACING)));
 
 			if (!(state.getBlock() instanceof BedBlock)) //it's half a bed!
 				isValid = true;
 		}
 
 		return isValid;
-	}
-
-	/**
-	 * Checks whether the given block is a specific block from a mod. Used to support stairs/slabs from other mods that don't
-	 * work with Sit by default.
-	 *
-	 * @param block The block to check
-	 * @return true if the block is a block to additionally support, false otherwise
-	 */
-	private static boolean isModBlock(Block block) {
-		/*
-		 * if(ModList.get().isLoaded("immersiveengineering") && b instanceof
-		 * blusunrize.immersiveengineering.common.blocks.BlockIESlab) return true; else if(ModList.get().isLoaded("snowvariants") &&
-		 * block instanceof trikzon.snowvariants.blocks.SnowSlab) return true; else
-		 */ return false;
 	}
 
 	/**

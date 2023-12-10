@@ -13,6 +13,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @EventBusSubscriber(bus = Bus.MOD, value = Dist.CLIENT)
 public class SitClient {
+	private SitClient() {}
+
 	@SubscribeEvent
 	public static void onFMLCLientSetup(FMLClientSetupEvent event) {
 		EntityRenderers.register(Sit.SIT_ENTITY_TYPE.get(), EmptyRenderer::new);

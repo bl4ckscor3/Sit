@@ -19,9 +19,9 @@ public class SitEntity extends Entity {
 		super(type, world);
 	}
 
-	public SitEntity(Level world, BlockPos pos) {
+	public SitEntity(Level world, BlockPos pos, double yOffset) {
 		super(Sit.SIT_ENTITY_TYPE.get(), world);
-		setPos(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
+		setPos(pos.getX() + 0.5D, pos.getY() + yOffset, pos.getZ() + 0.5D);
 		noPhysics = true;
 	}
 
