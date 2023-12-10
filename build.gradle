@@ -6,7 +6,7 @@ plugins {
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = '1.3.3'
+version = '1.3.4'
 group = 'bl4ckscor3.mod.sit'
 
 base {
@@ -46,8 +46,20 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+    	url "https://cursemaven.com/"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.20.1-47.1.3'
+    
+    implementation fg.deobf("curse.maven:snow-real-magic-308663:4925792")
+    implementation fg.deobf("curse.maven:kiwi-303657:4688568")
 }
 
 tasks.named('jar', Jar).configure {

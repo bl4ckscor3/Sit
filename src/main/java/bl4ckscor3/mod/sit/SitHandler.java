@@ -2,6 +2,7 @@ package bl4ckscor3.mod.sit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(modid = Sit.MODID)
@@ -28,14 +30,16 @@ public class SitHandler {
 		Player player = event.getEntity();
 		Level level = player.level();
 
-		if (!level.isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
+		if (event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
 			BlockPos pos = event.getPos();
 			BlockState state = level.getBlockState(pos);
 			Block block = state.getBlock();
 
 			if (isValidBlock(level, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(level, pos) && player.getMainHandItem().isEmpty() && level.getBlockState(pos.above()).isAir()) {
-				if ((!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM) && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM))
-					return;
+				if ((!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM) && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM)) {
+					if (ModList.get().isLoaded("snowrealmagic"))
+						event.setCanceled(SnowRealMagicSupport.sitDown(player, level, pos, state));
+				}
 				else
 					SitUtil.sitDown(player, level, pos, 0.25D);
 			}
@@ -68,7 +72,7 @@ public class SitHandler {
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
 	private static boolean isValidBlock(Level world, BlockPos pos, BlockState state, Block block) {
-		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock;
+		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock || state.is(BlockTags.SLABS) || state.is(BlockTags.STAIRS);
 
 		if (!isValid && block instanceof BedBlock) {
 			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(HorizontalDirectionalBlock.FACING).getOpposite() : state.getValue(HorizontalDirectionalBlock.FACING)));
