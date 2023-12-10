@@ -2,6 +2,7 @@ package bl4ckscor3.mod.sit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -19,23 +20,40 @@ public class SitUtil {
 	 */
 	private static final Map<ResourceLocation, Map<BlockPos, Pair<SitEntity, BlockPos>>> OCCUPIED = new HashMap<>();
 
+	private SitUtil() {}
+
+	/**
+	 * Makes the given player sit down at the given position with the given offset. Does not check for being able to sit down
+	 *
+	 * @param player The player to sit down
+	 * @param level The level to sit down in
+	 * @param pos The position to sit down at
+	 * @param yOffset The height to sit down at
+	 */
+	public static void sitDown(Player player, Level level, BlockPos pos, double yOffset) {
+		SitEntity sit = new SitEntity(level, pos, yOffset);
+
+		if (SitUtil.addSitEntity(level, pos, sit, player.blockPosition())) {
+			level.addFreshEntity(sit);
+			player.startRiding(sit);
+		}
+	}
+
 	/**
 	 * Adds a sit entity to the map that keeps track of them. This does not spawn the entity itself.
 	 *
-	 * @param world The world to add the entity in
+	 * @param level The level to add the entity in
 	 * @param blockPos The position at which to add the entity
 	 * @param entity The entity to add
 	 * @param playerPos The position of the player who is sitting down. Used for correctly positioning the player after
 	 *            dismounting
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
-	public static boolean addSitEntity(Level world, BlockPos blockPos, SitEntity entity, BlockPos playerPos) {
-		if (!world.isClientSide) {
-			ResourceLocation id = getDimensionTypeId(world);
+	public static boolean addSitEntity(Level level, BlockPos blockPos, SitEntity entity, BlockPos playerPos) {
+		if (!level.isClientSide) {
+			ResourceLocation id = getDimensionTypeId(level);
 
-			if (!OCCUPIED.containsKey(id))
-				OCCUPIED.put(id, new HashMap<>());
-
+			OCCUPIED.computeIfAbsent(id, location -> new HashMap<>());
 			OCCUPIED.get(id).put(blockPos, Pair.of(entity, playerPos));
 			return true;
 		}
@@ -46,13 +64,13 @@ public class SitUtil {
 	/**
 	 * Removes a sit entity from the map that keeps track of them. This does not remove the entity itself.
 	 *
-	 * @param world The world to remove the entity from
+	 * @param level The level to remove the entity from
 	 * @param pos The position to remove the entity from
 	 * @return true if the entity was removed, false otherwhise. This is always false on the client.
 	 */
-	public static boolean removeSitEntity(Level world, BlockPos pos) {
-		if (!world.isClientSide) {
-			ResourceLocation id = getDimensionTypeId(world);
+	public static boolean removeSitEntity(Level level, BlockPos pos) {
+		if (!level.isClientSide) {
+			ResourceLocation id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id)) {
 				OCCUPIED.get(id).remove(pos);
@@ -64,15 +82,15 @@ public class SitUtil {
 	}
 
 	/**
-	 * Gets the sit entity that is situated at the given position in the given world
+	 * Gets the sit entity that is situated at the given position in the given level
 	 *
-	 * @param world The world to get the entity from
+	 * @param level The level to get the entity from
 	 * @param pos The position to get the entity from
-	 * @return The entity at the given position in the given world, null if there is none. This is always null on the client.
+	 * @return The entity at the given position in the given level, null if there is none. This is always null on the client.
 	 */
-	public static SitEntity getSitEntity(Level world, BlockPos pos) {
-		if (!world.isClientSide) {
-			ResourceLocation id = getDimensionTypeId(world);
+	public static SitEntity getSitEntity(Level level, BlockPos pos) {
+		if (!level.isClientSide) {
+			ResourceLocation id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id) && OCCUPIED.get(id).containsKey(pos))
 				return OCCUPIED.get(id).get(pos).getLeft();
@@ -85,7 +103,7 @@ public class SitUtil {
 	 * Gets the position the player was at before he sat down
 	 *
 	 * @param player The player
-	 * @param sitEntityThe sit entity the player is sitting on
+	 * @param sitEntity The sit entity the player is sitting on
 	 * @return The position the player was at before he sat down, null if the player is not sitting. This is always null on the
 	 *         client.
 	 */
@@ -105,15 +123,15 @@ public class SitUtil {
 	}
 
 	/**
-	 * Checks whether there is a player sitting at the given block position in the given world
+	 * Checks whether there is a player sitting at the given block position in the given level
 	 *
-	 * @param world The world to check in
+	 * @param level The level to check in
 	 * @param pos The position to check at
-	 * @return true if a player is sitting at the given position in the given world, false otherwhise. This is always false on
+	 * @return true if a player is sitting at the given position in the given level, false otherwhise. This is always false on
 	 *         the client.
 	 */
-	public static boolean isOccupied(Level world, BlockPos pos) {
-		ResourceLocation id = getDimensionTypeId(world);
+	public static boolean isOccupied(Level level, BlockPos pos) {
+		ResourceLocation id = getDimensionTypeId(level);
 
 		return SitUtil.OCCUPIED.containsKey(id) && SitUtil.OCCUPIED.get(id).containsKey(pos);
 	}
@@ -125,8 +143,8 @@ public class SitUtil {
 	 * @return true if the given player is sitting anywhere, false otherwhise
 	 */
 	public static boolean isPlayerSitting(Player player) {
-		for (ResourceLocation i : OCCUPIED.keySet()) {
-			for (Pair<SitEntity, BlockPos> pair : OCCUPIED.get(i).values()) {
+		for (Entry<ResourceLocation, Map<BlockPos, Pair<SitEntity, BlockPos>>> entry : OCCUPIED.entrySet()) {
+			for (Pair<SitEntity, BlockPos> pair : entry.getValue().values()) {
 				if (pair.getLeft().hasPassenger(player))
 					return true;
 			}
@@ -135,7 +153,7 @@ public class SitUtil {
 		return false;
 	}
 
-	private static ResourceLocation getDimensionTypeId(Level world) {
-		return world.dimension().location();
+	private static ResourceLocation getDimensionTypeId(Level level) {
+		return level.dimension().location();
 	}
 }
