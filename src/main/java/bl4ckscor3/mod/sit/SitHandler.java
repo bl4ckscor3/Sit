@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,32 +15,34 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
 
 @EventBusSubscriber(modid = Sit.MODID)
 public class SitHandler {
+	private SitHandler() {}
+
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
 
 		if (!event.getLevel().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
-			Level world = event.getLevel();
+			Level level = event.getLevel();
 			BlockPos pos = event.getPos();
-			BlockState state = world.getBlockState(pos);
-			Block block = world.getBlockState(pos).getBlock();
+			BlockState state = level.getBlockState(pos);
+			Block block = level.getBlockState(pos).getBlock();
 
-			if (isValidBlock(world, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(world, pos) && player.getMainHandItem().isEmpty() && world.getBlockState(pos.above()).isAir()) {
+			if (isValidBlock(level, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(level, pos) && player.getMainHandItem().isEmpty() && level.getBlockState(pos.above()).isAir()) {
 				if (block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
 					return;
 				else if (block instanceof StairBlock && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM))
 					return;
 
-				SitEntity sit = new SitEntity(world, pos);
+				SitEntity sit = new SitEntity(level, pos);
 
-				if (SitUtil.addSitEntity(world, pos, sit, player.blockPosition())) {
-					world.addFreshEntity(sit);
+				if (SitUtil.addSitEntity(level, pos, sit, player.blockPosition())) {
+					level.addFreshEntity(sit);
 					player.startRiding(sit);
 				}
 			}
@@ -49,7 +52,7 @@ public class SitHandler {
 	@SubscribeEvent
 	public static void onBreak(BreakEvent event) {
 		if (!event.getLevel().isClientSide()) {
-			//BreakEvent gets a World in its constructor, so the cast is safe
+			//BreakEvent gets a Level in its constructor, so the cast is safe
 			SitEntity entity = SitUtil.getSitEntity((Level) event.getLevel(), event.getPos());
 
 			if (entity != null) {
@@ -62,17 +65,17 @@ public class SitHandler {
 	/**
 	 * Returns whether or not the given block can be sat on
 	 *
-	 * @param world The world to check in
+	 * @param level The level to check in
 	 * @param pos The position to check at
-	 * @param state The block state at the given position in the given world
+	 * @param state The block state at the given position in the given level
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
-	private static boolean isValidBlock(Level world, BlockPos pos, BlockState state, Block block) {
+	private static boolean isValidBlock(Level level, BlockPos pos, BlockState state, Block block) {
 		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock || isModBlock(block);
 
 		if (!isValid && block instanceof BedBlock) {
-			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(BedBlock.FACING).getOpposite() : state.getValue(BedBlock.FACING)));
+			state = level.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(HorizontalDirectionalBlock.FACING).getOpposite() : state.getValue(HorizontalDirectionalBlock.FACING)));
 
 			if (!(state.getBlock() instanceof BedBlock)) //it's half a bed!
 				isValid = true;

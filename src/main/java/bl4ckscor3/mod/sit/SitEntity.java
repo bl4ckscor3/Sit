@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,13 +16,13 @@ import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.phys.Vec3;
 
 public class SitEntity extends Entity {
-	public SitEntity(EntityType<SitEntity> type, Level world) {
-		super(type, world);
+	public SitEntity(EntityType<SitEntity> type, Level level) {
+		super(type, level);
 	}
 
-	public SitEntity(Level world, BlockPos pos) {
-		super(Sit.SIT_ENTITY_TYPE.get(), world);
-		setPos(pos.getX() + 0.5D, pos.getY() + 0.25D, pos.getZ() + 0.5D);
+	public SitEntity(Level level, BlockPos pos) {
+		super(Sit.SIT_ENTITY_TYPE.get(), level);
+		setPos(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		noPhysics = true;
 	}
 
@@ -55,7 +56,7 @@ public class SitEntity extends Entity {
 	}
 
 	@Override
-	protected void defineSynchedData() {}
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
 	@Override
 	protected void readAdditionalSaveData(CompoundTag tag) {}
