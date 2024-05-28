@@ -6,7 +6,7 @@ plugins {
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = '1.3.4'
+version = '1.3.5'
 group = 'bl4ckscor3.mod.sit'
 
 base {
