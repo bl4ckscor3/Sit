@@ -67,7 +67,7 @@ public class Sit implements ModInitializer {
 
 				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.25D, hitPos.getZ() + 0.5D);
 
-				if (SitUtil.addSitEntity(level, hitPos, sit, player.blockPosition())) {
+				if (SitUtil.addSitEntity(level, hitPos, sit, player.position())) {
 					level.addFreshEntity(sit);
 					player.startRiding(sit);
 					return InteractionResult.SUCCESS;
