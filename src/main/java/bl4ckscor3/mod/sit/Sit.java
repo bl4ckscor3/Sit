@@ -3,10 +3,10 @@ package bl4ckscor3.mod.sit;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -22,8 +22,8 @@ public class Sit {
 			.build(MODID + ":entity_sit"));
 	//@formatter:on
 
-	public Sit() {
+	public Sit(IEventBus modEventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Configuration.CONFIG_SPEC);
-		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ENTITY_TYPES.register(modEventBus);
 	}
 }
