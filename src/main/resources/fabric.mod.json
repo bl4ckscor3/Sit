@@ -19,9 +19,6 @@
     "main": [
       "bl4ckscor3.mod.sit.Sit"
     ],
-    "server": [
-      "bl4ckscor3.mod.sit.SitServer"
-    ],
     "client": [
       "bl4ckscor3.mod.sit.SitClient"
     ],
