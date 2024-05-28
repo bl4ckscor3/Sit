@@ -15,12 +15,12 @@ import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.phys.Vec3;
 
 public class SitEntity extends Entity {
-	public SitEntity(EntityType<SitEntity> type, Level world) {
-		super(type, world);
+	public SitEntity(EntityType<SitEntity> type, Level level) {
+		super(type, level);
 	}
 
-	public SitEntity(Level world, BlockPos pos, double yOffset) {
-		super(Sit.SIT_ENTITY_TYPE.get(), world);
+	public SitEntity(Level level, BlockPos pos, double yOffset) {
+		super(Sit.SIT_ENTITY_TYPE.get(), level);
 		setPos(pos.getX() + 0.5D, pos.getY() + yOffset, pos.getZ() + 0.5D);
 		noPhysics = true;
 	}

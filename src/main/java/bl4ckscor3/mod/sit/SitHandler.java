@@ -65,17 +65,17 @@ public class SitHandler {
 	/**
 	 * Returns whether or not the given block can be sat on
 	 *
-	 * @param world The world to check in
+	 * @param level The level to check in
 	 * @param pos The position to check at
-	 * @param state The block state at the given position in the given world
+	 * @param state The block state at the given position in the given level
 	 * @param block The block to check
 	 * @return true if the given block can be sat one, false otherwhise
 	 */
-	private static boolean isValidBlock(Level world, BlockPos pos, BlockState state, Block block) {
+	private static boolean isValidBlock(Level level, BlockPos pos, BlockState state, Block block) {
 		boolean isValid = block instanceof SlabBlock || block instanceof StairBlock || state.is(BlockTags.SLABS) || state.is(BlockTags.STAIRS);
 
 		if (!isValid && block instanceof BedBlock) {
-			state = world.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(HorizontalDirectionalBlock.FACING).getOpposite() : state.getValue(HorizontalDirectionalBlock.FACING)));
+			state = level.getBlockState(pos.relative(state.getValue(BedBlock.PART) == BedPart.HEAD ? state.getValue(HorizontalDirectionalBlock.FACING).getOpposite() : state.getValue(HorizontalDirectionalBlock.FACING)));
 
 			if (!(state.getBlock() instanceof BedBlock)) //it's half a bed!
 				isValid = true;
