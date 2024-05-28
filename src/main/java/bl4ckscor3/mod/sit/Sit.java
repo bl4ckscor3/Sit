@@ -1,23 +1,15 @@
 package bl4ckscor3.mod.sit;
 
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
@@ -33,8 +25,6 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 
 public class Sit implements ModInitializer {
-	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
-	public static final Component INCORRECT_VERSION = Component.literal(String.format("Please install Sit %d for Minecraft %s to play on this server.", getModVersion(), getMajorMinecraftVersion()));
 	//@formatter:off
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
@@ -103,30 +93,5 @@ public class Sit implements ModInitializer {
 		AABB range = new AABB(pos.getX() + blockReachDistance, pos.getY() + blockReachDistance, pos.getZ() + blockReachDistance, pos.getX() - blockReachDistance, pos.getY() - blockReachDistance, pos.getZ() - blockReachDistance);
 
 		return range.minX <= playerPos.getX() && range.minY <= playerPos.getY() && range.minZ <= playerPos.getZ() && range.maxX >= playerPos.getX() && range.maxY >= playerPos.getY() && range.maxZ >= playerPos.getZ();
-	}
-
-	private static String getMajorMinecraftVersion() {
-		String version = SharedConstants.VERSION_STRING;
-		String[] versionSplit = version.split("\\.");
-
-		if (versionSplit.length > 2)
-			return versionSplit[0] + "." + versionSplit[1];
-		else
-			return version;
-	}
-
-	public static int getModVersion() {
-		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("sit");
-
-		if (modContainer.isPresent()) {
-			try {
-				return Integer.parseInt(modContainer.get().getMetadata().getVersion().getFriendlyString().split("-")[1]); //Sit's format is mcversion-modversion
-			}
-			catch (Exception e) {
-				LogManager.getLogger().error("Couldn't find proper Sit version. Version is: {}", modContainer.get().getMetadata().getVersion().getFriendlyString());
-			}
-		}
-
-		return 0;
 	}
 }
