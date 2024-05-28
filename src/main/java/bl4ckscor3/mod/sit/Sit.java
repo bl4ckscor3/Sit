@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 
 public class Sit implements ModInitializer {
-	public static final ResourceLocation VERSION_CHECK = new ResourceLocation("sit", "version_check");
 	//@formatter:off
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
