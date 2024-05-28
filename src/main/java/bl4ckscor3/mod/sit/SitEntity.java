@@ -28,10 +28,9 @@ public class SitEntity extends Entity {
 	@Override
 	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
 		if (passenger instanceof Player player) {
-			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
+			Vec3 resetPosition = SitUtil.getPreviousPlayerPosition(player, this);
 
-			if (pos != null) {
-				Vec3 resetPosition = new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+			if (resetPosition != null) {
 				BlockPos belowResetPos = BlockPos.containing(resetPosition.x, resetPosition.y - 1, resetPosition.z);
 
 				discard();

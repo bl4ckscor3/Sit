@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Use this class to manage sit entities correctly
@@ -17,7 +18,7 @@ public class SitUtil {
 	/**
 	 * <dimension type id, <position, <entity, previous player position>>> This map only gets populated on server side.
 	 */
-	private static final Map<ResourceLocation, Map<BlockPos, Pair<SitEntity, BlockPos>>> OCCUPIED = new HashMap<>();
+	private static final Map<ResourceLocation, Map<BlockPos, Pair<SitEntity, Vec3>>> OCCUPIED = new HashMap<>();
 
 	private SitUtil() {}
 
@@ -31,7 +32,7 @@ public class SitUtil {
 	 *            dismounting
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
-	public static boolean addSitEntity(Level level, BlockPos blockPos, SitEntity entity, BlockPos playerPos) {
+	public static boolean addSitEntity(Level level, BlockPos blockPos, SitEntity entity, Vec3 playerPos) {
 		if (!level.isClientSide) {
 			ResourceLocation id = getDimensionTypeId(level);
 
@@ -91,12 +92,12 @@ public class SitUtil {
 	 * @return The position the player was at before he sat down, null if the player is not sitting. This is always null on the
 	 *         client.
 	 */
-	public static BlockPos getPreviousPlayerPosition(Player player, SitEntity sitEntity) {
+	public static Vec3 getPreviousPlayerPosition(Player player, SitEntity sitEntity) {
 		if (!player.level().isClientSide) {
 			ResourceLocation id = getDimensionTypeId(player.level());
 
 			if (OCCUPIED.containsKey(id)) {
-				for (Pair<SitEntity, BlockPos> pair : OCCUPIED.get(id).values()) {
+				for (Pair<SitEntity, Vec3> pair : OCCUPIED.get(id).values()) {
 					if (pair.getLeft() == sitEntity)
 						return pair.getRight();
 				}
@@ -128,7 +129,7 @@ public class SitUtil {
 	 */
 	public static boolean isPlayerSitting(Player player) {
 		for (ResourceLocation i : OCCUPIED.keySet()) {
-			for (Pair<SitEntity, BlockPos> pair : OCCUPIED.get(i).values()) {
+			for (Pair<SitEntity, Vec3> pair : OCCUPIED.get(i).values()) {
 				if (pair.getLeft().hasPassenger(player))
 					return true;
 			}
