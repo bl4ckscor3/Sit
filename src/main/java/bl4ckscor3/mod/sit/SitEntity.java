@@ -1,6 +1,5 @@
 package bl4ckscor3.mod.sit;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -26,11 +25,11 @@ public class SitEntity extends Entity {
 	@Override
 	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
 		if (passenger instanceof Player player) {
-			BlockPos pos = SitUtil.getPreviousPlayerPosition(player, this);
+			Vec3 resetPosition = SitUtil.getPreviousPlayerPosition(player, this);
 
-			if (pos != null) {
+			if (resetPosition != null) {
 				discard();
-				return new Vec3(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+				return resetPosition;
 			}
 		}
 
