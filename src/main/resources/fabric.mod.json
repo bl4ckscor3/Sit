@@ -10,7 +10,7 @@
   "contact": {
     "homepage": "https://curseforge.com/minecraft/mc-mods/sit-fabric",
     "issues": "https://github.com/bl4ckscor3/Sit/issues",
-    "sources": "https://github.com/bl4ckscor3/Sit/tree/fabric/1.20.5"
+    "sources": "https://github.com/bl4ckscor3/Sit/tree/fabric/1.20.6"
   },
   "license": "MIT",
   "icon": "assets/sit/icon.png",
