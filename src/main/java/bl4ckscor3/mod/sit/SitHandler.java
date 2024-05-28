@@ -41,7 +41,7 @@ public class SitHandler {
 
 				SitEntity sit = new SitEntity(level, pos);
 
-				if (SitUtil.addSitEntity(level, pos, sit, player.blockPosition())) {
+				if (SitUtil.addSitEntity(level, pos, sit, player.position())) {
 					level.addFreshEntity(sit);
 					player.startRiding(sit);
 				}

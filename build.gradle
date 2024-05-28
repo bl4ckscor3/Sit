@@ -32,7 +32,7 @@ runs {
 }
 
 dependencies {
-    implementation 'net.neoforged:neoforge:20.6.40-beta'
+    implementation 'net.neoforged:neoforge:20.6.89-beta'
 }
 
 tasks.named('jar', Jar).configure {
