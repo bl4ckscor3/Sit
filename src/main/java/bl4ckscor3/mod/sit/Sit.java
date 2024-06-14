@@ -26,7 +26,7 @@ public class Sit implements ModInitializer {
 	//@formatter:off
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
-			new ResourceLocation("sit", "entity_sit"),
+			ResourceLocation.fromNamespaceAndPath("sit", "entity_sit"),
 			EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC).sized(0.001F, 0.001F).build()
 	);
 	//@formatter:on
