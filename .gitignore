@@ -6,6 +6,6 @@
 /.gradle
 /.settings
 *.launch
-/run
+/runs
 /logs
 .idea/

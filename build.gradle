@@ -9,7 +9,7 @@ version = '1.3.5'
 group = 'bl4ckscor3.mod.sit'
 
 base {
-	archivesName = 'sit-1.21'
+	archivesName = 'sit-1.21.3'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -22,17 +22,17 @@ runs {
     }
 
     client {
-        workingDirectory project.file('run/client')
+        workingDirectory project.file('runs/client')
     }
 
     server {
-        workingDirectory project.file('run/server')
-        programArgument '-nogui'
+        workingDirectory project.file('runs/server')
+        argument '-nogui'
     }
 }
 
 dependencies {
-	implementation 'net.neoforged:neoforge:21.0.2-beta'
+	implementation 'net.neoforged:neoforge:21.3.2-beta'
 }
 
 tasks.named('jar', Jar).configure {
