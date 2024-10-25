@@ -6,6 +6,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData.Builder;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,5 +58,15 @@ public class SitEntity extends Entity {
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
 		return new ClientboundAddEntityPacket(this, serverEntity);
+	}
+
+	@Override
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		return false;
+	}
+
+	@Override
+	public boolean shouldRender(double x, double y, double z) {
+		return false;
 	}
 }

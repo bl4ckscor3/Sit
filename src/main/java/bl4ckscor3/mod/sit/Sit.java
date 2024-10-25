@@ -9,8 +9,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +30,7 @@ public class Sit implements ModInitializer {
 	public static final EntityType<SitEntity> SIT_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath("sit", "entity_sit"),
-			EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC).sized(0.001F, 0.001F).build()
+			EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC).sized(0.001F, 0.001F).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("sit", "entity_sit")))
 	);
 	//@formatter:on
 
@@ -49,7 +52,7 @@ public class Sit implements ModInitializer {
 				else if (b instanceof StairBlock && (!s.getProperties().contains(StairBlock.HALF) || s.getValue(StairBlock.HALF) != Half.BOTTOM))
 					return InteractionResult.PASS;
 
-				SitEntity sit = SIT_ENTITY_TYPE.create(level);
+				SitEntity sit = SIT_ENTITY_TYPE.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
 
 				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.5D, hitPos.getZ() + 0.5D);
 
