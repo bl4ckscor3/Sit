@@ -54,7 +54,7 @@ public class Sit implements ModInitializer {
 
 				SitEntity sit = SIT_ENTITY_TYPE.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
 
-				sit.absMoveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.5D, hitPos.getZ() + 0.5D);
+				sit.absSnapTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.5D, hitPos.getZ() + 0.5D);
 
 				if (SitUtil.addSitEntity(level, hitPos, sit, player.position())) {
 					level.addFreshEntity(sit);
