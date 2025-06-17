@@ -9,14 +9,14 @@ version = '1.3.5'
 group = 'bl4ckscor3.mod.sit'
 
 base {
-	archivesName = 'sit-1.21.5'
+	archivesName = 'sit-1.21.6'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 neoForge {
-	version = "21.5.62-beta"
+	version = "21.6.0-beta"
 
 	runs {
 		configureEach {

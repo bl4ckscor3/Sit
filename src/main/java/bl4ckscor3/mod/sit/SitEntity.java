@@ -2,7 +2,6 @@ package bl4ckscor3.mod.sit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -16,6 +15,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public class SitEntity extends Entity {
@@ -61,10 +62,10 @@ public class SitEntity extends Entity {
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundTag tag) {}
+	protected void readAdditionalSaveData(ValueInput tag) {}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag tag) {}
+	protected void addAdditionalSaveData(ValueOutput tag) {}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
