@@ -5,7 +5,7 @@ plugins {
 	id 'net.neoforged.moddev' version '2.0.82'
 }
 
-version = '1.3.5'
+version = '1.3.6'
 group = 'bl4ckscor3.mod.sit'
 
 base {
@@ -16,7 +16,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 neoForge {
-	version = "21.6.0-beta"
+	version = "21.6.6-beta"
 
 	runs {
 		configureEach {

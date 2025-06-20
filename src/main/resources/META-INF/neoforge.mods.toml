@@ -14,7 +14,7 @@ license="MIT https://github.com/bl4ckscor3/Sit/blob/neoforge/1.21.6/LICENSE"
 [[dependencies.sit]]
     modId="neoforge"
     type="required"
-    versionRange="[21,)"
+    versionRange="[21.6.6-beta,)"
     ordering="NONE"
     side="BOTH"
 
