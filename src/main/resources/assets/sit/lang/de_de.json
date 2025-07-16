@@ -1,0 +1,4 @@
+{
+	"sit.configuration.block_reach_distance": "Maximaler Blockabstand",
+	"sit.configuration.block_reach_distance.tooltip": "Der maximale Abstand in Blöcken, die der Spieler vom Block entfernt sein kann, um sich darauf hinzusetzen. Beachte, dass dieser Wert von der Vanilla-Distanz gedeckelt ist. Wenn der Wert 0 ist, muss der Spieler direkt auf dem Block stehen, um sich darauf hinsetzen zu können."
+}
