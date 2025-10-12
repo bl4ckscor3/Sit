@@ -27,7 +27,7 @@ public class SitHandler {
 	public static void onRightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
 
-		if (!event.getLevel().isClientSide && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
+		if (!event.getLevel().isClientSide() && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
 			Level level = event.getLevel();
 			BlockPos pos = event.getPos();
 			BlockState state = level.getBlockState(pos);
@@ -96,7 +96,8 @@ public class SitHandler {
 		 * if(ModList.get().isLoaded("immersiveengineering") && b instanceof
 		 * blusunrize.immersiveengineering.common.blocks.BlockIESlab) return true; else if(ModList.get().isLoaded("snowvariants") &&
 		 * block instanceof trikzon.snowvariants.blocks.SnowSlab) return true; else
-		 */ return false;
+		 */
+		return false;
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class SitUtil {
 	 * @return true if the entity was added, false otherwhise. This is always false on the client.
 	 */
 	public static boolean addSitEntity(Level level, BlockPos blockPos, SitEntity entity, Vec3 playerPos) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			ResourceLocation id = getDimensionTypeId(level);
 
 			if (!OCCUPIED.containsKey(id))
@@ -54,7 +54,7 @@ public class SitUtil {
 	 * @return true if the entity was removed, false otherwhise. This is always false on the client.
 	 */
 	public static boolean removeSitEntity(Level level, BlockPos pos) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			ResourceLocation id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id)) {
@@ -74,7 +74,7 @@ public class SitUtil {
 	 * @return The entity at the given position in the given level, null if there is none. This is always null on the client.
 	 */
 	public static SitEntity getSitEntity(Level level, BlockPos pos) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			ResourceLocation id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id) && OCCUPIED.get(id).containsKey(pos))
@@ -93,7 +93,7 @@ public class SitUtil {
 	 *         client.
 	 */
 	public static Vec3 getPreviousPlayerPosition(Player player, SitEntity sitEntity) {
-		if (!player.level().isClientSide) {
+		if (!player.level().isClientSide()) {
 			ResourceLocation id = getDimensionTypeId(player.level());
 
 			if (OCCUPIED.containsKey(id)) {
