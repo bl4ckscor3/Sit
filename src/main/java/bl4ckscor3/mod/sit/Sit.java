@@ -39,7 +39,7 @@ public class Sit implements ModInitializer {
 		AutoConfig.register(SitConfig.class, JanksonConfigSerializer::new);
 		//sit handling
 		UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
-			if (level.isClientSide || !level.mayInteract(player, hitResult.getBlockPos()) || player.isShiftKeyDown() || SitUtil.isPlayerSitting(player) || hitResult.getDirection() != Direction.UP)
+			if (level.isClientSide() || !level.mayInteract(player, hitResult.getBlockPos()) || player.isShiftKeyDown() || SitUtil.isPlayerSitting(player) || hitResult.getDirection() != Direction.UP)
 				return InteractionResult.PASS;
 
 			BlockPos hitPos = hitResult.getBlockPos();
@@ -66,7 +66,7 @@ public class Sit implements ModInitializer {
 			return InteractionResult.PASS;
 		});
 		PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) -> {
-			if (!level.isClientSide) {
+			if (!level.isClientSide()) {
 				SitEntity entity = SitUtil.getSitEntity(level, pos);
 
 				if (entity != null) {
