@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[1,)"
-license="MIT https://github.com/bl4ckscor3/Sit/blob/neoforge/1.21.10/LICENSE"
+license="MIT https://github.com/bl4ckscor3/Sit/blob/neoforge/1.21.11/LICENSE"
 
 [[mods]]
 	modId="sit"
@@ -14,13 +14,13 @@ license="MIT https://github.com/bl4ckscor3/Sit/blob/neoforge/1.21.10/LICENSE"
 [[dependencies.sit]]
     modId="neoforge"
     type="required"
-    versionRange="[21.10,)"
+    versionRange="[21.11,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.sit]]
     modId="minecraft"
     type="required"
-    versionRange="[1.21.10,1.22)"
+    versionRange="[1.21.11,)"
     ordering="NONE"
     side="BOTH"
