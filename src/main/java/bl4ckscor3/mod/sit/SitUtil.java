@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -18,7 +18,7 @@ public class SitUtil {
 	/**
 	 * <dimension type id, <position, <entity, previous player position>>> This map only gets populated server side.
 	 */
-	private static final Map<ResourceLocation, Map<BlockPos, Pair<SitEntity, Vec3>>> OCCUPIED = new HashMap<>();
+	private static final Map<Identifier, Map<BlockPos, Pair<SitEntity, Vec3>>> OCCUPIED = new HashMap<>();
 
 	private SitUtil() {}
 
@@ -34,7 +34,7 @@ public class SitUtil {
 	 */
 	public static boolean addSitEntity(Level level, BlockPos blockPos, SitEntity entity, Vec3 playerPos) {
 		if (!level.isClientSide()) {
-			ResourceLocation id = getDimensionTypeId(level);
+			Identifier id = getDimensionTypeId(level);
 
 			OCCUPIED.computeIfAbsent(id, unused -> new HashMap<>());
 			OCCUPIED.get(id).put(blockPos, Pair.of(entity, playerPos));
@@ -53,7 +53,7 @@ public class SitUtil {
 	 */
 	public static boolean removeSitEntity(Level level, BlockPos pos) {
 		if (!level.isClientSide()) {
-			ResourceLocation id = getDimensionTypeId(level);
+			Identifier id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id)) {
 				OCCUPIED.get(id).remove(pos);
@@ -73,7 +73,7 @@ public class SitUtil {
 	 */
 	public static SitEntity getSitEntity(Level level, BlockPos pos) {
 		if (!level.isClientSide()) {
-			ResourceLocation id = getDimensionTypeId(level);
+			Identifier id = getDimensionTypeId(level);
 
 			if (OCCUPIED.containsKey(id) && OCCUPIED.get(id).containsKey(pos))
 				return OCCUPIED.get(id).get(pos).getLeft();
@@ -92,7 +92,7 @@ public class SitUtil {
 	 */
 	public static Vec3 getPreviousPlayerPosition(Player player, SitEntity sitEntity) {
 		if (!player.level().isClientSide()) {
-			ResourceLocation id = getDimensionTypeId(player.level());
+			Identifier id = getDimensionTypeId(player.level());
 
 			if (OCCUPIED.containsKey(id)) {
 				for (Pair<SitEntity, Vec3> pair : OCCUPIED.get(id).values()) {
@@ -114,7 +114,7 @@ public class SitUtil {
 	 *         client.
 	 */
 	public static boolean isOccupied(Level level, BlockPos pos) {
-		ResourceLocation id = getDimensionTypeId(level);
+		Identifier id = getDimensionTypeId(level);
 
 		return SitUtil.OCCUPIED.containsKey(id) && SitUtil.OCCUPIED.get(id).containsKey(pos);
 	}
@@ -136,7 +136,7 @@ public class SitUtil {
 		return false;
 	}
 
-	private static ResourceLocation getDimensionTypeId(Level level) {
-		return level.dimension().location();
+	private static Identifier getDimensionTypeId(Level level) {
+		return level.dimension().identifier();
 	}
 }
