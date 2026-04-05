@@ -1,0 +1,46 @@
+plugins {
+    id 'net.neoforged.moddev' version "${mdg_version}"
+}
+
+neoForge {
+    version = neoforge_version
+
+    runs {
+        configureEach {
+            gameDirectory = mkdir(file("${run_dir}/" + name))
+            logLevel = org.slf4j.event.Level.DEBUG
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+        }
+
+        client {
+            client()
+        }
+
+        server {
+            server()
+            programArgument('-nogui')
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+dependencies {
+    compileOnly project(":common")
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+compileJava {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}

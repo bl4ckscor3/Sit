@@ -2,6 +2,7 @@ package bl4ckscor3.mod.sit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -14,56 +15,48 @@ import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
 
-@EventBusSubscriber(modid = Sit.MODID)
 public class SitHandler {
 	private SitHandler() {}
 
-	@SubscribeEvent
-	public static void onRightClickBlock(RightClickBlock event) {
-		Player player = event.getEntity();
-
-		if (!event.getLevel().isClientSide() && event.getFace() == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
-			Level level = event.getLevel();
-			BlockPos pos = event.getPos();
+	public static InteractionResult onRightClickBlock(Player player, Level level, Direction clickedFace, BlockPos pos) {
+		if (!level.isClientSide() && clickedFace == Direction.UP && !SitUtil.isPlayerSitting(player) && !player.isShiftKeyDown()) {
 			BlockState state = level.getBlockState(pos);
 			Block block = level.getBlockState(pos).getBlock();
 
 			if (isValidBlock(level, pos, state, block) && isPlayerInRange(player, pos) && !SitUtil.isOccupied(level, pos) && player.getMainHandItem().isEmpty() && level.getBlockState(pos.above()).isAir()) {
 				if (block instanceof SlabBlock && (!state.hasProperty(SlabBlock.TYPE) || state.getValue(SlabBlock.TYPE) != SlabType.BOTTOM))
-					return;
+					return InteractionResult.PASS;
 				else if (block instanceof StairBlock && (!state.hasProperty(StairBlock.HALF) || state.getValue(StairBlock.HALF) != Half.BOTTOM))
-					return;
+					return InteractionResult.PASS;
 
 				SitEntity sit = new SitEntity(level, pos);
 
 				if (SitUtil.addSitEntity(level, pos, sit, player.position())) {
 					level.addFreshEntity(sit);
 					player.startRiding(sit);
+					return InteractionResult.SUCCESS;
 				}
 			}
 		}
+
+		return InteractionResult.PASS;
 	}
 
-	@SubscribeEvent
-	public static void onBreak(BreakEvent event) {
-		if (!event.getLevel().isClientSide()) {
+	public static void onBreak(Level level, BlockPos pos) {
+		if (!level.isClientSide()) {
 			//BreakEvent gets a Level in its constructor, so the cast is safe
-			SitEntity entity = SitUtil.getSitEntity((Level) event.getLevel(), event.getPos());
+			SitEntity entity = SitUtil.getSitEntity(level, pos);
 
 			if (entity != null) {
-				SitUtil.removeSitEntity((Level) event.getLevel(), event.getPos());
+				SitUtil.removeSitEntity(level, pos);
 				entity.ejectPassengers();
 			}
 		}
 	}
 
 	/**
-	 * Returns whether or not the given block can be sat on
+	 * Returns whether the given block can be sat on
 	 *
 	 * @param level The level to check in
 	 * @param pos The position to check at
@@ -101,7 +94,7 @@ public class SitHandler {
 	}
 
 	/**
-	 * Returns whether or not the player is close enough to the block to be able to sit on it
+	 * Returns whether the player is close enough to the block to be able to sit on it
 	 *
 	 * @param player The player
 	 * @param pos The position of the block to sit on

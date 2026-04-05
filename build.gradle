@@ -1,66 +1,84 @@
 plugins {
-    id 'java-library'
-    id 'eclipse'
     id 'idea'
-	id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = '1.4'
-group = 'bl4ckscor3.mod.sit'
+subprojects {
+    apply plugin: 'java'
 
-base {
-	archivesName = 'sit-26.1.1'
-}
+    base {
+        archivesName = "${mod_id}-${project.path.substring(1)}-${minecraft_version}"
+    }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+    java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
 
-neoForge {
-	version = "26.1.1.4-beta"
+    repositories {
+        maven {
+            url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        }
+    }
 
-	runs {
-		configureEach {
-			logLevel = org.slf4j.event.Level.DEBUG
-			gameDirectory = project.file("runs/" + name)
-			ideName = "Sit " + ideName.get()
-		}
+    jar {
+        destinationDirectory = file("../build/libs")
 
-		client {
-			client()
-		}
+        from(rootProject.file("LICENSE")) {
+            rename { "${it}_${mod_name}" }
+        }
 
-		server {
-			server()
-			programArgument('-nogui')
-		}
-	}
+        manifest {
+            attributes([
+                    'Specification-Title'     : mod_name,
+                    'Specification-Vendor'    : mod_author,
+                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : mod_author,
+                    'Built-On-Minecraft'      : minecraft_version
+            ])
+        }
+    }
 
-	mods {
-		sit {
-			sourceSet(sourceSets.main)
-		}
-	}
-}
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8'
+        it.options.getRelease().set(java_version.toInteger())
+    }
 
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes(["Specification-Title": "Sit",
-                    "Specification-Vendor": "bl4ckscor3",
-                    "Specification-Version": "${version}",
-                    "Implementation-Title": "Sit",
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor": "bl4ckscor3"])
+    tasks.withType(AbstractTestTask).configureEach {
+        failOnNoDiscoveredTests = false
+    }
+
+    processResources {
+        var expandProps = [
+                'version'                      : version,
+                'minecraft_version'            : minecraft_version,
+                'java_version'                 : java_version,
+                'license'                      : license,
+                'mod_id'                       : mod_id,
+                'mod_name'                     : mod_name,
+                'description'                  : project.description,
+                'mod_author'                   : mod_author,
+                'minecraft_version_range'      : minecraft_version_range,
+                'fcap_version'                 : fcap_version,
+                'neoforge_version'             : neoforge_version
+        ]
+        var jsonExpandProps = expandProps.collectEntries {
+            key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
+        }
+
+        filesMatching(['META-INF/neoforge.mods.toml']) {
+            expand expandProps
+        }
+
+        filesMatching(['fabric.mod.json', '*.mixins.json']) {
+            expand jsonExpandProps
+        }
+
+        inputs.properties(expandProps)
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = 'UTF-8'
-	it.options.getRelease().set(25)
-}
-
 idea {
-	module {
-		downloadSources = true
-		downloadJavadoc = true
-	}
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

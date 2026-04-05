@@ -1,0 +1,14 @@
+plugins {
+    id 'net.neoforged.moddev' version "${mdg_version}"
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+}
+
+dependencies {
+    api "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${fcap_version}"
+    compileOnly "net.fabricmc:sponge-mixin:${mixin_version}"
+    compileOnly "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
+    annotationProcessor "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
+}

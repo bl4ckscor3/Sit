@@ -1,0 +1,38 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "homepage": "https://curseforge.com/minecraft/mc-mods/sit-fabric",
+        "issues": "https://github.com/bl4ckscor3/Sit/issues",
+        "sources": "https://github.com/bl4ckscor3/Sit"
+    },
+    "license": "${license}",
+    "icon": "assets/${mod_id}/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "bl4ckscor3.mod.sit.FabricEntrypoint"
+        ],
+        "client": [
+            "bl4ckscor3.mod.sit.FabricClientEntrypoint"
+        ]
+    },
+    "mixins": [
+        "sit.mixins.json"
+    ],
+    "depends": {
+        "fabric-api": "*",
+        "minecraft": ">=${minecraft_version}",
+        "java": ">=${java_version}",
+        "forgeconfigapiport": ">=${fcap_version}"
+    },
+    "custom": {
+        "modmenu:clientsideOnly": true
+    }
+}

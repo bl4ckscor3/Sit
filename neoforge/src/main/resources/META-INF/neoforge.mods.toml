@@ -1,0 +1,29 @@
+license="${license}"
+issueTrackerURL="https://github.com/bl4ckscor3/Sit/issues"
+
+[[mods]]
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_name}"
+    description='''${description}'''
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/sit"
+    logoFile="assets/${mod_id}/icon.png"
+    authors="${mod_author}"
+
+[[mixins]]
+    config="sit.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neoforge_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
