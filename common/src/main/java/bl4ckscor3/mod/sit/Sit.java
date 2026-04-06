@@ -22,7 +22,7 @@ public class Sit {
 
 	public synchronized static void initialize(Platform platform) {
 		if (Sit.platform != null) {
-			throw new IllegalArgumentException("BiomeInfo platform has already been initialized");
+			throw new IllegalArgumentException("Sit platform has already been initialized");
 		}
 
 		Sit.platform = platform;
