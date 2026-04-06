@@ -31,8 +31,5 @@
         "minecraft": ">=${minecraft_version}",
         "java": ">=${java_version}",
         "forgeconfigapiport": ">=${fcap_version}"
-    },
-    "custom": {
-        "modmenu:clientsideOnly": true
     }
 }
