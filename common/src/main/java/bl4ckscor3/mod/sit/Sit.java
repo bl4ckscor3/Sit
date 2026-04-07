@@ -26,7 +26,7 @@ public class Sit {
 		}
 
 		Sit.platform = platform;
-		platform.register(Registries.ENTITY_TYPE, SIT_ENTITY_TYPE, SIT_ENTITY_ID);
+		platform.register(Registries.ENTITY_TYPE, SIT_ENTITY_TYPE, SIT_ENTITY_ID.getPath());
 	}
 
 	public static Identifier id(String path) {
