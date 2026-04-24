@@ -14,7 +14,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(Sit.MODID)
@@ -50,7 +50,7 @@ public class NeoEntrypoint implements Platform {
 	}
 
 	@SubscribeEvent
-	public static void onBreak(BlockEvent.BreakEvent event) {
+	public static void onBreak(BreakBlockEvent event) {
 		SitHandler.onBreak((Level) event.getLevel(), event.getPos());
 	}
 }

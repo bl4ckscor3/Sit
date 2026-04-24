@@ -58,7 +58,7 @@ subprojects {
                 'mod_author'                   : mod_author,
                 'minecraft_version_range'      : minecraft_version_range,
                 'fcap_version'                 : fcap_version,
-                'neoforge_version'             : neoforge_version
+                'minimum_neoforge_version'     : minimum_neoforge_version
         ]
         var jsonExpandProps = expandProps.collectEntries {
             key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
